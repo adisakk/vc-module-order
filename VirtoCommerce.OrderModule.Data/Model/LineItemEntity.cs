@@ -94,7 +94,9 @@ namespace VirtoCommerce.OrderModule.Data.Model
         public virtual LineItem ToModel(LineItem lineItem)
         {
             if (lineItem == null)
+            {
                 throw new ArgumentNullException(nameof(lineItem));
+            }
 
             lineItem.InjectFrom(this);
             lineItem.IsGift = IsGift;
@@ -107,7 +109,9 @@ namespace VirtoCommerce.OrderModule.Data.Model
         public virtual LineItemEntity FromModel(LineItem lineItem, PrimaryKeyResolvingMap pkMap)
         {
             if (lineItem == null)
+            {
                 throw new ArgumentNullException(nameof(lineItem));
+            }
 
             ModelLineItem = lineItem;
             pkMap.AddPair(lineItem, this);
