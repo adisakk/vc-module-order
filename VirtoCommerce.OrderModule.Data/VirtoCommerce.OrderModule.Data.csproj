@@ -79,7 +79,8 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="VirtoCommerce.Domain, Version=2.25.13.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\VirtoCommerce.Domain.2.25.13\lib\net461\VirtoCommerce.Domain.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\vc-module-core\VirtoCommerce.Domain\bin\Release\VirtoCommerce.Domain.dll</HintPath>
     </Reference>
     <Reference Include="VirtoCommerce.Platform.Core, Version=2.13.26.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\VirtoCommerce.Platform.Core.2.13.26\lib\net461\VirtoCommerce.Platform.Core.dll</HintPath>
@@ -196,6 +197,18 @@
     <Compile Include="Migrations\201809140916230_AddedAmountColumnToPaymentInEntity.Designer.cs">
       <DependentUpon>201809140916230_AddedAmountColumnToPaymentInEntity.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201902201939520_Initial1.cs" />
+    <Compile Include="Migrations\201902201939520_Initial1.Designer.cs">
+      <DependentUpon>201902201939520_Initial1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902201946389_Initial2.cs" />
+    <Compile Include="Migrations\201902201946389_Initial2.Designer.cs">
+      <DependentUpon>201902201946389_Initial2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902202003185_Initial3.cs" />
+    <Compile Include="Migrations\201902202003185_Initial3.Designer.cs">
+      <DependentUpon>201902202003185_Initial3.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AddressEntity.cs" />
     <Compile Include="Model\CustomerOrderEntity.cs" />
@@ -209,6 +222,8 @@
     <Compile Include="Model\ShipmentItemEntity.cs" />
     <Compile Include="Model\TaxDetailEntity.cs" />
     <Compile Include="Notifications\CancelOrderEmailNotification.cs" />
+    <Compile Include="Notifications\DigitalContentEmailNotification.cs" />
+    <Compile Include="Notifications\ShippingEmailNotification.cs" />
     <Compile Include="Notifications\InvoiceEmailNotification.cs" />
     <Compile Include="Notifications\NewOrderStatusEmailNotification.cs" />
     <Compile Include="Notifications\OrderCreateEmailNotification.cs" />
@@ -313,6 +328,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201809140916230_AddedAmountColumnToPaymentInEntity.resx">
       <DependentUpon>201809140916230_AddedAmountColumnToPaymentInEntity.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902201939520_Initial1.resx">
+      <DependentUpon>201902201939520_Initial1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902201946389_Initial2.resx">
+      <DependentUpon>201902201946389_Initial2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902202003185_Initial3.resx">
+      <DependentUpon>201902202003185_Initial3.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\OrderResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

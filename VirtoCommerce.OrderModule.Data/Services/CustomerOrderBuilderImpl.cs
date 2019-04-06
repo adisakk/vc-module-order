@@ -188,6 +188,8 @@ namespace VirtoCommerce.OrderModule.Data.Services
         {
             var retVal = AbstractTypeFactory<orderModel.Shipment>.TryCreateInstance();
 
+            retVal.PickupDate = shipment.PickupDate;
+            retVal.TrackingNumber = shipment.TrackingNumber;
             retVal.Currency = shipment.Currency;
             retVal.DiscountAmount = shipment.DiscountAmount;
             retVal.Height = shipment.Height;

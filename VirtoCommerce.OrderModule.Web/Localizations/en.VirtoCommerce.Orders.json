@@ -1,21 +1,21 @@
-﻿{
+{
     "orders": {
         "main-menu-title": "Orders",
         "blades": {
             "customerOrder-detail": {
                 "title": "{{customer}}'s order",
                 "subtitle": "Edit order details and related documents",
-                "labels": {
-                    "approved": "Approved",
-                    "employee": "Assigned to",
-                    "order-number": "Customer order number",
-                    "status": "Status",
-                    "store": "Store",
-                    "from": "From",
-                    "channel": "Channel",
-                    "customer": "Customer",
-                    "invoice": "Get invoice PDF"
-                },
+              "labels": {
+                "approved": "Approved",
+                "employee": "Assigned to",
+                "order-number": "Customer order number",
+                "status": "Status",
+                "store": "Store",
+                "from": "From",
+                "channel": "Channel",
+                "customer": "Customer",
+                "invoice": "Get invoice PDF"
+              },
                 "placeholders": {
                     "employee": "Select assignee",
                     "status": "Select...",
@@ -110,22 +110,26 @@
                 "title": "Shipment #{{number}}",
                 "title-new": "New Shipment",
                 "subtitle": "Edit shipment details",
-                "labels": {
-                    "shipment-method": "Shipment method",
-                    "approved": "Approved",
-                    "shipment-number": "Shipment number",
-                    "status": "Status",
-                    "fulfillment-center": "Fulfillment center",
-                    "from": "From",
-                    "employee": "Assigned to",
-                    "price": "Shipment amount",
-                    "price-with-tax": "Shipment amount with tax"
-                },
-                "placeholders": {
-                    "status": "Select...",
-                    "shipment-method": "Select...",
-                    "fulfillment-center": "Select or search a center..."
-                }
+              "labels": {
+                "shipment-method": "Shipment method",
+                "approved": "Approved",
+                "shipment-number": "Shipment number",
+                "status": "Status",
+                "fulfillment-center": "Fulfillment center",
+                "from": "From",
+                "employee": "Assigned to",
+                "price": "Shipment amount",
+                "price-with-tax": "Shipment amount with tax",
+                "pickup-date": "Package pickup date",
+                "shipping-label": "Print shipping label",
+                "parcel-tracking": "Parcel tracking"
+              },
+              "placeholders": {
+                "status": "Select...",
+                "shipment-method": "Select...",
+                "fulfillment-center": "Select or search a center...",
+                "pickup-date": "Schedule a pickup date..."
+              }
             },
             "shipment-items": {
                 "title": "{{title}} line items",

@@ -11,6 +11,10 @@ namespace VirtoCommerce.OrderModule.Data.Model
 {
     public class ShipmentEntity : OperationEntity
     {
+        public DateTime? PickupDate { get; set; }
+        [StringLength(30)]
+        public string TrackingNumber { get; set; }
+
         [StringLength(64)]
         public string OrganizationId { get; set; }
         [StringLength(255)]
@@ -158,6 +162,8 @@ namespace VirtoCommerce.OrderModule.Data.Model
             if (target == null)
                 throw new ArgumentException(@"operation argument must be of type ShipmentEntity", nameof(operation));
 
+            target.PickupDate = PickupDate;
+            target.TrackingNumber = TrackingNumber;
             target.Price = Price;
             target.PriceWithTax = PriceWithTax;
             target.DiscountAmount = DiscountAmount;

@@ -1,6 +1,6 @@
-﻿angular.module('virtoCommerce.orderModule')
-.controller('virtoCommerce.orderModule.shipmentDetailController', ['$scope', 'platformWebApp.bladeNavigationService', 'platformWebApp.dialogService', 'platformWebApp.settings', 'virtoCommerce.orderModule.order_res_customerOrders', 'virtoCommerce.orderModule.order_res_fulfilmentCenters', 'virtoCommerce.orderModule.statusTranslationService',
-    function ($scope, bladeNavigationService, dialogService, settings, customerOrders, order_res_fulfilmentCenters, statusTranslationService) {
+angular.module('virtoCommerce.orderModule')
+.controller('virtoCommerce.orderModule.shipmentDetailController', ['$scope','$window', 'platformWebApp.bladeNavigationService', 'platformWebApp.dialogService', 'platformWebApp.settings', 'virtoCommerce.orderModule.order_res_customerOrders', 'virtoCommerce.orderModule.order_res_fulfilmentCenters', 'virtoCommerce.orderModule.statusTranslationService',
+    function ($scope, $window, bladeNavigationService, dialogService, settings, customerOrders, order_res_fulfilmentCenters, statusTranslationService) {
         var blade = $scope.blade;
 
         if (blade.isNew) {
@@ -31,6 +31,53 @@
         function translateBladeStatuses(data) {
             blade.statuses = statusTranslationService.translateStatuses(data, 'shipment');
         }
+
+        // datepicker
+        $scope.datepickers = {}
+        $scope.open = function ($event, which) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.datepickers[which] = true;
+        };
+
+        //load pickup date
+        //blade.pickupDate = blade.parentBlade.pickupDate;
+        //alert(blade.pickupDate);
+        //alert(blade.parentBlade.employees);
+        console.log('shipment-detail.js');
+        console.log(blade);
+
+        blade.toolbarCommands.push({
+            name: 'orders.blades.shipment-detail.labels.shipping-label',
+            icon: 'fa fa-download',
+            //index: 5,
+            executeMethod: function (blade) {
+                var labelUrl = 'api/order/customerOrders/shippingLabel/' + blade.customerOrder.number;
+                //alert("labelUrl: " + labelUrl);
+                $window.open(labelUrl, '_blank');
+                
+            },
+            canExecuteMethod: function () {
+                return true;
+            }
+        });
+
+        blade.toolbarCommands.push({
+            name: 'orders.blades.shipment-detail.labels.parcel-tracking',
+            icon: 'fa fa-truck',
+            //index: 5,
+            executeMethod: function (blade) {
+                //RSIT000593376
+                var labelUrl = 'https://virto.aftership.com/' + blade.customerOrder.shipments[0].trackingNumber;
+                //alert("labelUrl: " + labelUrl);
+                //alert($window);
+                $window.open(labelUrl, '_blank');
+
+            },
+            canExecuteMethod: function () {
+                return true;
+            }
+        });
 
         // load employees
         blade.employees = blade.parentBlade.employees;

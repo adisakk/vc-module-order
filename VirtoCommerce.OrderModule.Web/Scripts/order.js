@@ -23,6 +23,7 @@ angular.module(moduleName, ['virtoCommerce.catalogModule', 'virtoCommerce.pricin
                           template: 'Modules/$(VirtoCommerce.Orders)/Scripts/blades/customerOrder-list.tpl.html',
                           isClosingDisabled: true
                       };
+                      
                       bladeNavigationService.showBlade(blade);
                       //Need for isolate and prevent conflict module css to another modules 
                       //it value included in bladeContainer as ng-class='moduleName'

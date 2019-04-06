@@ -504,6 +504,70 @@ namespace VirtoCommerce.OrderModule.Web.Controllers.Api
             return ResponseMessage(result);
         }
 
+        [HttpGet]
+        [Route("shippingLabel/{orderNumber}")]
+        [SwaggerFileResponse]
+        public IHttpActionResult GetShippingLabelPdf(string orderNumber)
+        {
+            var searchCriteria = AbstractTypeFactory<CustomerOrderSearchCriteria>.TryCreateInstance();
+            searchCriteria.Number = orderNumber;
+            searchCriteria.Take = 1;
+
+            var order = _searchService.SearchCustomerOrders(searchCriteria).Results.FirstOrDefault();
+
+            if (order == null)
+            {
+                throw new InvalidOperationException($"Cannot find order with number {orderNumber}");
+            }
+
+            var shipping = _notificationManager.GetNewNotification<ShippingEmailNotification>(order.StoreId, "Store", order.LanguageCode);
+
+            shipping.CustomerOrder = order;
+            _notificationTemplateResolver.ResolveTemplate(shipping);
+
+            var stream = new MemoryStream();
+            var pdf = PdfGenerator.GeneratePdf(shipping.Body, PdfSharp.PageSize.A4);
+            pdf.Save(stream, false);
+            stream.Seek(0, SeekOrigin.Begin);
+
+            var result = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StreamContent(stream) };
+            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
+
+            return ResponseMessage(result);
+        }
+
+        [HttpGet]
+        [Route("digitalContent/{orderNumber}")]
+        [SwaggerFileResponse]
+        public IHttpActionResult GetDigitalContent(string orderNumber)
+        {
+            var searchCriteria = AbstractTypeFactory<CustomerOrderSearchCriteria>.TryCreateInstance();
+            searchCriteria.Number = orderNumber;
+            searchCriteria.Take = 1;
+
+            var order = _searchService.SearchCustomerOrders(searchCriteria).Results.FirstOrDefault();
+
+            if (order == null)
+            {
+                throw new InvalidOperationException($"Cannot find order with number {orderNumber}");
+            }
+
+            var digital = _notificationManager.GetNewNotification<DigitalContentEmailNotification>(order.StoreId, "Store", order.LanguageCode);
+
+            digital.CustomerOrder = order;
+            _notificationTemplateResolver.ResolveTemplate(digital);
+
+            var stream = new MemoryStream();
+            var pdf = PdfGenerator.GeneratePdf(digital.Body, PdfSharp.PageSize.A4);
+            pdf.Save(stream, false);
+            stream.Seek(0, SeekOrigin.Begin);
+
+            var result = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StreamContent(stream) };
+            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
+
+            return ResponseMessage(result);
+        }
+
 
         [HttpGet]
         [Route("{id}/changes")]

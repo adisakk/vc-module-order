@@ -1,4 +1,4 @@
-﻿<div class="blade-static __bottom" ng-include="'$(Platform)/Scripts/common/templates/ok-cancel2.tpl.html'"></div>
+<div class="blade-static __bottom" ng-include="'$(Platform)/Scripts/common/templates/ok-cancel2.tpl.html'"></div>
 <div class="blade-content __medium-wide">
     <div class="blade-inner">
         <div class="inner-block" ng-controller="virtoCommerce.orderModule.shipmentDetailController">
@@ -57,7 +57,15 @@
                             </div>
                         </div>
                         <div class="column">
-                            <div style="height:60px">&nbsp;</div>
+                            <div class="form-group">
+                                <label class="form-label">{{ 'orders.blades.shipment-detail.labels.pickup-date' | translate }}</label>
+                                <div class="form-input __calendar">
+                                    <input ng-model="blade.currentEntity.pickupDate" placeholder="{{ 'orders.blades.shipment-detail.placeholders.pickup-date' | translate }}" datepicker-popup="" is-open="datepickers.pickup" />
+                                    <button class="btn" type="button" ng-click="open($event,'pickup')">
+                                        <i class="btn-ico fa fa-calendar"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </fieldset>

@@ -1,4 +1,4 @@
-﻿angular.module('virtoCommerce.orderModule')
+angular.module('virtoCommerce.orderModule')
 .controller('virtoCommerce.orderModule.operationDetailController', ['$scope', 'platformWebApp.dialogService', 'platformWebApp.bladeNavigationService', 'virtoCommerce.orderModule.order_res_customerOrders', 'platformWebApp.objCompareService', '$timeout', 'focus',
     function ($scope, dialogService, bladeNavigationService, customerOrders, objCompareService, $timeout, focus) {
         var blade = $scope.blade;
@@ -67,6 +67,7 @@
             $scope.bladeClose();
         }
         $scope.saveChanges = function () {
+            
             if (blade.id === 'operationDetail') {
                 angular.copy(blade.currentEntity, blade.origEntity);
                 if (blade.isNew) {

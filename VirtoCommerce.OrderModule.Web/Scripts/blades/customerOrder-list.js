@@ -33,6 +33,8 @@ function ($scope, $localStorage, customerOrders, bladeUtils, dialogService, auth
 
                 $scope.pageSettings.totalItems = data.totalCount;
                 $scope.objects = data.customerOrders;
+                console.log('customerOrder-list.js');
+                console.log($scope.objects);
             });
         }
     };
@@ -47,6 +49,8 @@ function ($scope, $localStorage, customerOrders, bladeUtils, dialogService, auth
                 newBlade.id = 'preloadedOrderDetails';
             }
             newBlade.customerOrder = node;
+            console.log('customerOrder-list.js');
+            console.log(newBlade.customerOrder);
             bladeNavigationService.showBlade(newBlade, blade);
         }
     };

@@ -156,6 +156,30 @@ namespace VirtoCommerce.OrderModule.Web
                 }
             });
 
+            notificationManager.RegisterNotificationType(() => new ShippingEmailNotification(_container.Resolve<IEmailNotificationSendingGateway>())
+            {
+                Description = "The template for for customer order invoice (used for PDF generation)",
+                DisplayName = "The invoice for customer order",
+                NotificationTemplate = new NotificationTemplate
+                {
+                    Body = ShippingLabelResource.Body,
+                    Subject = ShippingLabelResource.Subject,
+                    Language = "en-US"
+                }
+            });
+
+            notificationManager.RegisterNotificationType(() => new DigitalContentEmailNotification(_container.Resolve<IEmailNotificationSendingGateway>())
+            {
+                Description = "The template for for customer order invoice (used for PDF generation)",
+                DisplayName = "The invoice for customer order",
+                NotificationTemplate = new NotificationTemplate
+                {
+                    Body = DigitalContentResource.Body,
+                    Subject = DigitalContentResource.Subject,
+                    Language = "en-US"
+                }
+            });
+
             var securityScopeService = _container.Resolve<IPermissionScopeService>();
             securityScopeService.RegisterSope(() => new OrderStoreScope());
             securityScopeService.RegisterSope(() => new OrderResponsibleScope());
