@@ -3,7 +3,7 @@ namespace VirtoCommerce.OrderModule.Data.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class Initial4 : DbMigration
+    public partial class AddProductOwner : DbMigration
     {
         public override void Up()
         {

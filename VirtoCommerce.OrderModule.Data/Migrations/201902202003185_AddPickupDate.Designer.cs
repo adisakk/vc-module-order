@@ -7,9 +7,9 @@ namespace VirtoCommerce.OrderModule.Data.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class Initial3 : IMigrationMetadata
+    public sealed partial class AddPickupDate : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Initial3));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(AddPickupDate));
         
         string IMigrationMetadata.Id
         {

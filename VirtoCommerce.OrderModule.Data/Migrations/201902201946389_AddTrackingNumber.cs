@@ -3,7 +3,7 @@ namespace VirtoCommerce.OrderModule.Data.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class Initial2 : DbMigration
+    public partial class AddTrackingNumber : DbMigration
     {
         public override void Up()
         {
