@@ -590,7 +590,6 @@ namespace VirtoCommerce.OrderModule.Web.Controllers.Api
         }
         private CustomerOrderSearchCriteria FilterOrderSearchCriteria(string userName, CustomerOrderSearchCriteria criteria)
         {
-
             if (!_securityService.UserHasAnyPermission(userName, null, OrderPredefinedPermissions.Read))
             {
                 //Get defined user 'read' permission scopes
@@ -612,6 +611,12 @@ namespace VirtoCommerce.OrderModule.Web.Controllers.Api
                 {
                     criteria.EmployeeId = userName;
                 }
+            }
+
+            // TODO: Add order owner filter for BP and Staff
+            if (!_securityService.isAdministrator(userName))
+            {
+                criteria.ProductOwner = userName;
             }
             return criteria;
         }
