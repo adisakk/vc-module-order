@@ -15,7 +15,5 @@ namespace VirtoCommerce.OrderModule.Data.Repositories
 
         CustomerOrderEntity[] GetCustomerOrdersByIds(string[] ids, CustomerOrderResponseGroup responseGroup);
         void RemoveOrdersByIds(string[] ids);
-
-        CustomerOrderEntity[] GetCustomerOrdersByCartId(string shoppingCartId, CustomerOrderResponseGroup responseGroup);
     }
 }
