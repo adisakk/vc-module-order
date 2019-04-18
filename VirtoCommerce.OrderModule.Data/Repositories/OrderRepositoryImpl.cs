@@ -219,6 +219,12 @@ namespace VirtoCommerce.OrderModule.Data.Repositories
         public IQueryable<LineItemEntity> LineItems => GetAsQueryable<LineItemEntity>();
         public IQueryable<PaymentGatewayTransactionEntity> Transactions => GetAsQueryable<PaymentGatewayTransactionEntity>();
 
+        public virtual CustomerOrderEntity[] GetCustomerOrdersByCartId(string shoppingCartId, CustomerOrderResponseGroup responseGroup)
+        {
+            var orderIds = CustomerOrders.Where(x => shoppingCartId == x.ShoppingCartId).Select(x => x.Id).ToArray();
+            return GetCustomerOrdersByIds(orderIds, responseGroup);
+        }
+
         public virtual CustomerOrderEntity[] GetCustomerOrdersByIds(string[] ids, CustomerOrderResponseGroup responseGroup)
         {
             var result = CustomerOrders.Where(x => ids.Contains(x.Id)).ToArray();

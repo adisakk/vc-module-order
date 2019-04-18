@@ -183,6 +183,8 @@ namespace VirtoCommerce.OrderModule.Web.Controllers.Api
         [ResponseType(typeof(ProcessPaymentResult))]
         public IHttpActionResult ProcessOrderPayments(string orderId, string paymentId, [SwaggerOptional] BankCardInfo bankCardInfo)
         {
+            // TODO: process payment for every order in group
+
             var order = _customerOrderService.GetByIds(new[] { orderId }, CustomerOrderResponseGroup.Full.ToString()).FirstOrDefault();
 
             if (order == null)
@@ -241,12 +243,17 @@ namespace VirtoCommerce.OrderModule.Web.Controllers.Api
         [CheckPermission(Permission = OrderPredefinedPermissions.Create)]
         public async Task<IHttpActionResult> CreateOrderFromCart(string id)
         {
-            CustomerOrder retVal;
+            CustomerOrder retVal = new CustomerOrder();
+            string responseGroup = VirtoCommerce.Domain.Cart.Model.CartResponseGroup.SeparateByProductOwner.ToString();
 
             using (await AsyncLock.GetLockByKey(id).LockAsync())
             {
-                var cart = _cartService.GetByIds(new[] { id }).FirstOrDefault();
-                retVal = _customerOrderBuilder.PlaceCustomerOrderFromCart(cart);
+                var carts = _cartService.GetByIds(new[] { id }, responseGroup);
+                foreach (var cart in carts)
+                {
+                    // TODO: Change single return value to array
+                    retVal = _customerOrderBuilder.PlaceCustomerOrderFromCart(cart);
+                }
             }
 
             return Ok(retVal);
@@ -420,55 +427,70 @@ namespace VirtoCommerce.OrderModule.Web.Controllers.Api
             searchCriteria.Number = orderId;
             searchCriteria.ResponseGroup = CustomerOrderResponseGroup.Full.ToString();
             //if order not found by order number search by order id
-            var order = _searchService.SearchCustomerOrders(searchCriteria).Results.FirstOrDefault() ?? _customerOrderService.GetByIds(new[] { orderId }, CustomerOrderResponseGroup.Full.ToString()).FirstOrDefault();
+            var mainOrder = _searchService.SearchCustomerOrders(searchCriteria).Results.FirstOrDefault() ?? _customerOrderService.GetByIds(new[] { orderId }, CustomerOrderResponseGroup.Full.ToString()).FirstOrDefault();
 
-            if (order == null)
+            if (mainOrder == null)
             {
                 throw new InvalidOperationException($"Cannot find order with ID {orderId}");
             }
 
-            var orderPaymentsCodes = order.InPayments.Select(x => x.GatewayCode).Distinct().ToArray();
-            var store = _storeService.GetById(order.StoreId);
-            var paymentMethodCode = parameters.Get("code");
-            //Need to use concrete  payment method if it code passed otherwise use all order payment methods
-            var paymentMethods = store.PaymentMethods.Where(x => x.IsActive)
-                                                     .Where(x => orderPaymentsCodes.Contains(x.Code));
-            if (!string.IsNullOrEmpty(paymentMethodCode))
-            {
-                paymentMethods = paymentMethods.Where(x => x.Code.EqualsInvariant(paymentMethodCode));
-            }
+            //Search group of orders by cart id that were separated to many order for each product owners
+            var orders = _customerOrderService.GetByShoppingCartId(mainOrder.ShoppingCartId);
 
-            foreach (var paymentMethod in paymentMethods)
+            foreach (var order in orders)
             {
-                //Each payment method must check that these parameters are addressed to it
-                var result = paymentMethod.ValidatePostProcessRequest(parameters);
-                if (result.IsSuccess)
+                var orderPaymentsCodes = order.InPayments.Select(x => x.GatewayCode).Distinct().ToArray();
+                var store = _storeService.GetById(order.StoreId);
+                var paymentMethodCode = parameters.Get("code");
+                //Need to use concrete  payment method if it code passed otherwise use all order payment methods
+                var paymentMethods = store.PaymentMethods.Where(x => x.IsActive)
+                                                         .Where(x => orderPaymentsCodes.Contains(x.Code));
+                if (!string.IsNullOrEmpty(paymentMethodCode))
                 {
-                    var paymentOuterId = result.OuterId;
-                    var payment = order.InPayments.FirstOrDefault(x => string.IsNullOrEmpty(x.OuterId) || x.OuterId == paymentOuterId);
-                    if (payment == null)
-                    {
-                        throw new InvalidOperationException(@"Cannot find payment");
-                    }
-                    var context = new PostProcessPaymentEvaluationContext
-                    {
-                        Order = order,
-                        Payment = payment,
-                        Store = store,
-                        OuterId = paymentOuterId,
-                        Parameters = parameters
-                    };
-                    var retVal = paymentMethod.PostProcessPayment(context);
-                    if (retVal != null)
-                    {
-                        _customerOrderService.SaveChanges(new[] { order });
+                    paymentMethods = paymentMethods.Where(x => x.Code.EqualsInvariant(paymentMethodCode));
+                }
 
-                        // order Number is required
-                        retVal.OrderId = order.Number;
+                // TODO: Delete this
+                System.IO.File.WriteAllText("C:\\tmp\\order_" +order.Number+ ".log", order.Id+ ", paymentMethods="+ paymentMethods.ToString());
+
+                foreach (var paymentMethod in paymentMethods)
+                {
+                    //Each payment method must check that these parameters are addressed to it
+                    var result = paymentMethod.ValidatePostProcessRequest(parameters);
+                    if (result.IsSuccess)
+                    {
+                        var paymentOuterId = result.OuterId;
+                        var payment = order.InPayments.FirstOrDefault(x => string.IsNullOrEmpty(x.OuterId) || x.OuterId == paymentOuterId);
+
+                        if (payment == null)
+                        {
+                            throw new InvalidOperationException(@"Cannot find payment");
+                        }
+                        var context = new PostProcessPaymentEvaluationContext
+                        {
+                            Order = order,
+                            Payment = payment,
+                            Store = store,
+                            OuterId = paymentOuterId,
+                            Parameters = parameters
+                        };
+                        var retVal = paymentMethod.PostProcessPayment(context);
+                        if (retVal != null)
+                        {
+                            _customerOrderService.SaveChanges(new[] { order });
+
+                            // order Number is required
+                            retVal.OrderId = order.Number;
+                        }
+
+                        System.IO.File.WriteAllText("C:\\tmp\\order_" + order.Number + "_" + paymentMethod + ".log", "paymentId=" + payment.Id);
+
+                        return Ok(retVal);
                     }
-                    return Ok(retVal);
                 }
             }
+
+            
             return Ok(new PostProcessPaymentResult { ErrorMessage = "Payment method not found" });
         }
 

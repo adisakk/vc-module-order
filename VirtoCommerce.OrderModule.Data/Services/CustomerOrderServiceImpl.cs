@@ -100,6 +100,40 @@ namespace VirtoCommerce.OrderModule.Data.Services
             EventPublisher.Publish(new OrderChangedEvent(changedEntries));
         }
 
+        public virtual CustomerOrder[] GetByShoppingCartId(string shoppingCartId, string responseGroup = null)
+        {
+            var retVal = new List<CustomerOrder>();
+            var orderResponseGroup = EnumUtility.SafeParse(responseGroup, CustomerOrderResponseGroup.Full);
+
+            using (var repository = RepositoryFactory())
+            {
+                repository.DisableChangesTracking();
+
+                var orderEntities = repository.GetCustomerOrdersByCartId(shoppingCartId, orderResponseGroup);
+                foreach (var orderEntity in orderEntities)
+                {
+                    var customerOrder = AbstractTypeFactory<CustomerOrder>.TryCreateInstance();
+                    if (customerOrder != null)
+                    {
+                        customerOrder = orderEntity.ToModel(customerOrder) as CustomerOrder;
+
+                        //Calculate totals only for full responseGroup
+                        if (orderResponseGroup == CustomerOrderResponseGroup.Full)
+                        {
+                            TotalsCalculator.CalculateTotals(customerOrder);
+                        }
+                        LoadOrderDependencies(customerOrder);
+                        retVal.Add(customerOrder);
+                    }
+                }
+            }
+            if (DynamicPropertyService != null)
+            {
+                DynamicPropertyService.LoadDynamicPropertyValues(retVal.ToArray<IHasDynamicProperties>());
+            }
+            return retVal.ToArray();
+        }
+
         public virtual CustomerOrder[] GetByIds(string[] orderIds, string responseGroup = null)
         {
             var retVal = new List<CustomerOrder>();
