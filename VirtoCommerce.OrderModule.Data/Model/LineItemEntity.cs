@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -87,6 +87,9 @@ namespace VirtoCommerce.OrderModule.Data.Model
         public virtual CustomerOrderEntity CustomerOrder { get; set; }
         public string CustomerOrderId { get; set; }
 
+        [StringLength(64)]
+        public string ProductOwner { get; set; }
+
 
         public virtual LineItem ToModel(LineItem lineItem)
         {
@@ -152,6 +155,7 @@ namespace VirtoCommerce.OrderModule.Data.Model
             target.CancelledDate = CancelledDate;
             target.CancelReason = CancelReason;
             target.Comment = Comment;
+            target.ProductOwner = ProductOwner;
 
             if (!Discounts.IsNullCollection())
             {
