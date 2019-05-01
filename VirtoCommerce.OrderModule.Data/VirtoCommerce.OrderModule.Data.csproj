@@ -197,21 +197,17 @@
     <Compile Include="Migrations\201809140916230_AddedAmountColumnToPaymentInEntity.Designer.cs">
       <DependentUpon>201809140916230_AddedAmountColumnToPaymentInEntity.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201902201946389_AddTrackingNumber.cs" />
-    <Compile Include="Migrations\201902201946389_AddTrackingNumber.Designer.cs">
-      <DependentUpon>201902201946389_AddTrackingNumber.cs</DependentUpon>
+    <Compile Include="Migrations\201902201939520_Initial1.cs" />
+    <Compile Include="Migrations\201902201939520_Initial1.Designer.cs">
+      <DependentUpon>201902201939520_Initial1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201902202003185_AddPickupDate.cs" />
-    <Compile Include="Migrations\201902202003185_AddPickupDate.Designer.cs">
-      <DependentUpon>201902202003185_AddPickupDate.cs</DependentUpon>
+    <Compile Include="Migrations\201902201946389_Initial2.cs" />
+    <Compile Include="Migrations\201902201946389_Initial2.Designer.cs">
+      <DependentUpon>201902201946389_Initial2.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201904071625371_AddProductOwner.cs" />
-    <Compile Include="Migrations\201904071625371_AddProductOwner.Designer.cs">
-      <DependentUpon>201904071625371_AddProductOwner.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904071653092_ResizeProductOwner.cs" />
-    <Compile Include="Migrations\201904071653092_ResizeProductOwner.Designer.cs">
-      <DependentUpon>201904071653092_ResizeProductOwner.cs</DependentUpon>
+    <Compile Include="Migrations\201902202003185_Initial3.cs" />
+    <Compile Include="Migrations\201902202003185_Initial3.Designer.cs">
+      <DependentUpon>201902202003185_Initial3.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AddressEntity.cs" />
@@ -333,17 +329,14 @@
     <EmbeddedResource Include="Migrations\201809140916230_AddedAmountColumnToPaymentInEntity.resx">
       <DependentUpon>201809140916230_AddedAmountColumnToPaymentInEntity.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201902201946389_AddTrackingNumber.resx">
-      <DependentUpon>201902201946389_AddTrackingNumber.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201902201939520_Initial1.resx">
+      <DependentUpon>201902201939520_Initial1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201902202003185_AddPickupDate.resx">
-      <DependentUpon>201902202003185_AddPickupDate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201902201946389_Initial2.resx">
+      <DependentUpon>201902201946389_Initial2.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904071625371_AddProductOwner.resx">
-      <DependentUpon>201904071625371_AddProductOwner.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904071653092_ResizeProductOwner.resx">
-      <DependentUpon>201904071653092_ResizeProductOwner.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201902202003185_Initial3.resx">
+      <DependentUpon>201902202003185_Initial3.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\OrderResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -7,13 +7,13 @@ namespace VirtoCommerce.OrderModule.Data.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class ResizeProductOwner : IMigrationMetadata
+    public sealed partial class Initial3 : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(ResizeProductOwner));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Initial3));
         
         string IMigrationMetadata.Id
         {
-            get { return "201904071653092_ResizeProductOwner"; }
+            get { return "201902202003185_Initial3"; }
         }
         
         string IMigrationMetadata.Source

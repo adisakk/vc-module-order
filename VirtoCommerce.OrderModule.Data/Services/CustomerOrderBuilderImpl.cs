@@ -127,7 +127,7 @@ namespace VirtoCommerce.OrderModule.Data.Services
             }
 
             var retVal = AbstractTypeFactory<orderModel.LineItem>.TryCreateInstance();
-            retVal.ProductOwner = lineItem.ProductOwner;
+
             retVal.CreatedDate = lineItem.CreatedDate;
             retVal.CatalogId = lineItem.CatalogId;
             retVal.CategoryId = lineItem.CategoryId;

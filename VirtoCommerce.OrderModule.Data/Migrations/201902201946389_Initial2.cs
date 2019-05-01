@@ -3,16 +3,16 @@ namespace VirtoCommerce.OrderModule.Data.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class ResizeProductOwner : DbMigration
+    public partial class Initial2 : DbMigration
     {
         public override void Up()
         {
-            AlterColumn("dbo.OrderLineItem", "ProductOwner", c => c.String(maxLength: 64));
+            AddColumn("dbo.OrderShipment", "TrackingNumber", c => c.String(maxLength: 30));
         }
         
         public override void Down()
         {
-            AlterColumn("dbo.OrderLineItem", "ProductOwner", c => c.String());
+            DropColumn("dbo.OrderShipment", "TrackingNumber");
         }
     }
 }

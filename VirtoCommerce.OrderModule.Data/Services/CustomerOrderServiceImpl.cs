@@ -250,10 +250,7 @@ namespace VirtoCommerce.OrderModule.Data.Services
             {
                 query = query.Where(x => x.OrganizationId == criteria.OrganizationId);
             }
-            if (criteria.ProductOwner != null)
-            {
-                query = query.Where(x => x.Items.Any(i => i.ProductOwner == criteria.ProductOwner));
-            }
+
 
             return query;
         }
