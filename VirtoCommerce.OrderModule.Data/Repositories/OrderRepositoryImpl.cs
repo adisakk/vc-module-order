@@ -37,6 +37,12 @@ namespace VirtoCommerce.OrderModule.Data.Repositories
             modelBuilder.Entity<OperationEntity>().ToTable("OrderOperation");
             #endregion
 
+            #region SubOperation
+            modelBuilder.Entity<SubOperationEntity>().HasKey(x => x.Id)
+                .Property(x => x.Id);
+            modelBuilder.Entity<SubOperationEntity>().ToTable("SubOrderOperation");
+            #endregion
+
             #region CustomerOrder
             modelBuilder.Entity<CustomerOrderEntity>().HasKey(x => x.Id)
                     .Property(x => x.Id);
@@ -218,6 +224,7 @@ namespace VirtoCommerce.OrderModule.Data.Repositories
         public IQueryable<AddressEntity> Addresses => GetAsQueryable<AddressEntity>();
         public IQueryable<LineItemEntity> LineItems => GetAsQueryable<LineItemEntity>();
         public IQueryable<PaymentGatewayTransactionEntity> Transactions => GetAsQueryable<PaymentGatewayTransactionEntity>();
+        public IQueryable<SubOperationEntity> SubOperations => GetAsQueryable<SubOperationEntity>();
 
         public virtual CustomerOrderEntity[] GetCustomerOrdersByIds(string[] ids, CustomerOrderResponseGroup responseGroup)
         {
@@ -259,6 +266,9 @@ namespace VirtoCommerce.OrderModule.Data.Repositories
                 var shipmentItems = ShipmentItems.Where(x => shipmentIds.Contains(x.ShipmentId)).ToArray();
                 var packages = ShipmentPackagesPackages.Include(x => x.Items).Where(x => shipmentIds.Contains(x.ShipmentId)).ToArray();
             }
+
+            var subOperations = SubOperations.Where(x => ids.Contains(x.CustomerOrderId)).ToArray();
+
             return result;
         }
 

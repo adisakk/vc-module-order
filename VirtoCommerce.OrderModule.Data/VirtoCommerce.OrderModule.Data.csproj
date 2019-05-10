@@ -213,6 +213,10 @@
     <Compile Include="Migrations\201904071653092_ResizeProductOwner.Designer.cs">
       <DependentUpon>201904071653092_ResizeProductOwner.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201905061636019_SubOperation.cs" />
+    <Compile Include="Migrations\201905061636019_SubOperation.Designer.cs">
+      <DependentUpon>201905061636019_SubOperation.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AddressEntity.cs" />
     <Compile Include="Model\CustomerOrderEntity.cs" />
@@ -224,6 +228,7 @@
     <Compile Include="Model\ShipmentEntity.cs" />
     <Compile Include="Model\ShipmentPackageEntity.cs" />
     <Compile Include="Model\ShipmentItemEntity.cs" />
+    <Compile Include="Model\SubOperationEntity.cs" />
     <Compile Include="Model\TaxDetailEntity.cs" />
     <Compile Include="Notifications\CancelOrderEmailNotification.cs" />
     <Compile Include="Notifications\DigitalContentEmailNotification.cs" />
@@ -344,6 +349,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904071653092_ResizeProductOwner.resx">
       <DependentUpon>201904071653092_ResizeProductOwner.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905061636019_SubOperation.resx">
+      <DependentUpon>201905061636019_SubOperation.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\OrderResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

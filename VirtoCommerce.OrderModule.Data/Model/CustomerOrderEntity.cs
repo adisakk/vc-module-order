@@ -87,6 +87,8 @@ namespace VirtoCommerce.OrderModule.Data.Model
 
         public virtual ObservableCollection<DiscountEntity> Discounts { get; set; } = new NullCollection<DiscountEntity>();
 
+        public virtual ObservableCollection<SubOperationEntity> SubOperations { get; set; } = new NullCollection<SubOperationEntity>();
+
 
         public override OrderOperation ToModel(OrderOperation operation)
         {
@@ -94,6 +96,7 @@ namespace VirtoCommerce.OrderModule.Data.Model
             if (order == null)
                 throw new ArgumentException(@"operation argument must be of type CustomerOrder", nameof(operation));
 
+            order.SubOperations = SubOperations.Select(x => x.ToModel(AbstractTypeFactory<SubOperation>.TryCreateInstance())).ToList();
             order.Discounts = Discounts.Select(x => x.ToModel(AbstractTypeFactory<Discount>.TryCreateInstance())).ToList();
             order.Items = Items.Select(x => x.ToModel(AbstractTypeFactory<LineItem>.TryCreateInstance())).ToList();
             order.Addresses = Addresses.Select(x => x.ToModel(AbstractTypeFactory<Address>.TryCreateInstance())).ToList();
@@ -120,6 +123,12 @@ namespace VirtoCommerce.OrderModule.Data.Model
             {
                 Addresses = new ObservableCollection<AddressEntity>(order.Addresses.Select(x => AbstractTypeFactory<AddressEntity>.TryCreateInstance().FromModel(x)));
             }
+
+            if (order.SubOperations != null)
+            {
+                SubOperations = new ObservableCollection<SubOperationEntity>(order.SubOperations.Select(x => AbstractTypeFactory<SubOperationEntity>.TryCreateInstance().FromModel(x, pkMap)));
+            }
+
 
             if (order.Items != null)
             {
@@ -228,6 +237,11 @@ namespace VirtoCommerce.OrderModule.Data.Model
             if (!Items.IsNullCollection())
             {
                 Items.Patch(target.Items, (sourceItem, targetItem) => sourceItem.Patch(targetItem));
+            }
+
+            if (!SubOperations.IsNullCollection())
+            {
+                SubOperations.Patch(target.SubOperations, (sourceSubOperation, targetSubOperation) => sourceSubOperation.Patch(targetSubOperation));
             }
 
             if (!InPayments.IsNullCollection())

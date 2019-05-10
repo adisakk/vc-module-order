@@ -1,5 +1,6 @@
 using CacheManager.Core;
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
@@ -87,11 +88,22 @@ namespace VirtoCommerce.OrderModule.Web.Controllers.Api
             criteria = FilterOrderSearchCriteria(HttpContext.Current.User.Identity.Name, criteria);
 
             var result = _searchService.SearchCustomerOrders(criteria);
+
+            //Change operation type for BP
+            if (!_securityService.isAdministrator(User.Identity.Name))
+            {
+                foreach (var order in result.Results.ToList())
+                {
+                    order.OperationType = order.GetType().Name + "-Sub";
+                }
+            }
+
             var retVal = new webModel.CustomerOrderSearchResult
             {
                 CustomerOrders = result.Results.ToList(),
                 TotalCount = result.TotalCount
             };
+
             return Ok(retVal);
         }
 
@@ -154,8 +166,79 @@ namespace VirtoCommerce.OrderModule.Web.Controllers.Api
             //Set scopes for UI scope bounded ACL checking
             retVal.Scopes = scopes;
 
+            //Check number of BP and calculate total then move sub operation of this BP to the first index
+            if (!_securityService.isAdministrator(User.Identity.Name))
+            {
+                int bpCount = retVal.Items.GroupBy(x => x.ProductOwner).OrderByDescending(group => group.Count()).Select(group => group.Key).Count();
+                if (bpCount > 1)
+                {
+                    retVal.OperationType += "-Sub";
+                    var bpName = User.Identity.Name;
+                    var bpItems = retVal.Items.Where(x => x.ProductOwner == bpName);
+                    int bpIemCount = 0;
+                    decimal subTotal = 0m;
+                    decimal subTotalDiscount = 0m;
+                    decimal subTotalDiscountWithTax = 0m;
+                    decimal subTotalTaxTotal = 0m;
+                    decimal paymentFees = 0m;
+                    decimal paymentFeesWithTax = 0m;
+                    decimal shippingTotal = 0m;
+                    decimal shippingTotalWithTax = 0m;
+
+                    foreach (var item in bpItems)
+                    {
+                        bpIemCount += 1;
+                        subTotal += (item.Price * item.Quantity);
+                        subTotalDiscount += (item.DiscountAmount * item.Quantity);
+                        subTotalDiscountWithTax += (item.DiscountAmountWithTax * item.Quantity);
+                        subTotalTaxTotal += item.TaxTotal;
+                    }
+
+                    if (!retVal.InPayments.IsNullOrEmpty())
+                    {
+                        foreach (var payment in retVal.InPayments)
+                        {
+                            paymentFees += (payment.Price / bpCount);
+                            paymentFeesWithTax += (payment.PriceWithTax /bpCount);
+                            payment.OperationType += "-Sub";
+                        }
+                    }
+
+                    if (!retVal.Shipments.IsNullOrEmpty())
+                    {
+                        foreach (var shipment in retVal.Shipments)
+                        {
+                            shippingTotal += (shipment.Price / bpCount);
+                            shipment.AveragePrice = shippingTotal;
+                            shippingTotalWithTax += (shipment.PriceWithTax / bpCount);
+                            shipment.AveragePriceWithTax = shippingTotalWithTax;
+                            shipment.OperationType += "-Sub";
+                        }
+                    }
+
+                    var tmpList = retVal.SubOperations.ToList();
+                    var index = tmpList.FindIndex(x => x.OwnerName == bpName);
+                    if (index >= 0)
+                    {
+                        var subOperation = tmpList[index];
+                        tmpList[index] = tmpList[0];
+                        subOperation.BpCount = bpCount;
+                        subOperation.ItemCount = bpIemCount;
+                        subOperation.SubTotal = subTotal;
+                        subOperation.SubTotalDiscount = subTotalDiscount;
+                        subOperation.SubTotalTaxTotal = subTotalTaxTotal;
+                        subOperation.PaymentFees = paymentFees;
+                        subOperation.ShippingTotal = shippingTotal;
+                        subOperation.Sum = subTotal + subTotalTaxTotal + paymentFeesWithTax + shippingTotalWithTax - subTotalDiscountWithTax;
+                        tmpList[0] = subOperation;
+                        retVal.SubOperations = tmpList;
+                    }
+                }
+            }
+
             return Ok(retVal);
         }
+
 
         /// <summary>
 		/// Calculate order totals after changes
@@ -281,6 +364,40 @@ namespace VirtoCommerce.OrderModule.Web.Controllers.Api
             {
                 throw new HttpResponseException(HttpStatusCode.Unauthorized);
             }
+
+            //Update status and approve when all BP update their sub operations
+            customerOrder.ObjectType = customerOrder.GetType().Name;
+            bool approved = false;
+            bool isUpdateStatus = false;
+            string status = "";
+            foreach (var subOperation in customerOrder.SubOperations)
+            {
+                if (subOperation.IsApproved)
+                {
+                    approved = true;
+                }
+
+                if (status != subOperation.Status)
+                {
+                    status = subOperation.Status;
+                    isUpdateStatus = false;
+                }
+                else
+                {
+                    status = subOperation.Status;
+                    isUpdateStatus = true;
+                }
+            }
+            if (approved)
+            {
+                customerOrder.IsApproved = approved;
+            }
+
+            if (isUpdateStatus)
+            {
+                customerOrder.Status = status;
+            }
+
 
             _customerOrderService.SaveChanges(new[] { customerOrder });
             return StatusCode(HttpStatusCode.NoContent);

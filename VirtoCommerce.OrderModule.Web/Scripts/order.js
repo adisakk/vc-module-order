@@ -202,6 +202,138 @@ angular.module(moduleName, ['virtoCommerce.catalogModule', 'virtoCommerce.pricin
         };
         knownOperations.registerOperation(shipmentOperation);
 
+        // For BP - register CustomerOrder, PaymentIn and Shipment types as known operations
+        var customerOrderForBP = {
+            type: 'CustomerOrder-Sub',
+            treeTemplateUrl: 'orderOperationDefault.tpl.html',
+            detailBlade: {
+                id: 'orderDetail',
+                template: 'Modules/$(VirtoCommerce.Orders)/Scripts/blades/customerOrder-detail-bp.tpl.html',
+                knownChildrenOperations: ['Shipment', 'PaymentIn'],
+                metaFields: [
+                    {
+                        name: 'subOperations[0].isApproved',
+                        title: "orders.blades.customerOrder-detail.labels.approved",
+                        valueType: "Boolean",
+                        isVisibleFn: function (blade) {
+                            return !blade.isNew;
+                        }
+                    },
+                    {
+                        name: 'employeeId',
+                        title: "orders.blades.customerOrder-detail.labels.employee",
+                        templateUrl: 'order-employeeSelector.html'
+                    },
+                    {
+                        name: 'number',
+                        isRequired: true,
+                        title: "orders.blades.customerOrder-detail.labels.order-number",
+                        valueType: "ShortText"
+                    },
+                    {
+                        name: 'selectedSubOperation.createdDate',
+                        title: "orders.blades.customerOrder-detail.labels.from",
+                        templateUrl: 'createdDate.html'
+                    },
+                    {
+                        name: 'subOperations[0].status',
+                        templateUrl: 'statusSelector.html'
+                    },
+                    {
+                        name: 'customerName',
+                        title: "orders.blades.customerOrder-detail.labels.customer",
+                        templateUrl: 'customerSelector.html'
+                    },
+                    {
+                        name: 'selectedSubOperation.discountAmount',
+                        title: "orders.blades.customerOrder-items.labels.discount",
+                        templateUrl: 'discountAmount.html'
+                    },
+                    {
+                        name: 'storeId',
+                        title: "orders.blades.customerOrder-detail.labels.store",
+                        templateUrl: 'storeSelector.html'
+                    }
+                ]
+            }
+        };
+        knownOperations.registerOperation(customerOrderForBP);
+
+        var paymentInOperationForBP = {
+            type: 'PaymentIn-Sub',
+            description: 'orders.blades.newOperation-wizard.menu.payment-operation.description',
+            treeTemplateUrl: 'paymentIn-sub.tpl.html',
+            detailBlade: {
+                template: 'Modules/$(VirtoCommerce.Orders)/Scripts/blades/payment-detail-bp.tpl.html',
+                metaFields: [
+                    {
+                        name: 'number',
+                        isRequired: true,
+                        title: "orders.blades.payment-detail.labels.payment-number",
+                        valueType: "ShortText"
+                    },
+                    {
+                        name: 'createdDate',
+                        title: "orders.blades.payment-detail.labels.from",
+                        templateUrl: 'createdDate.html'
+                    },
+                    {
+                        name: 'price',
+                        title: "orders.blades.payment-detail.labels.price",
+                        templateUrl: 'price.html'
+                    },
+                    {
+                        name: 'priceWithTax',
+                        title: "orders.blades.payment-detail.labels.price-with-tax",
+                        templateUrl: 'priceWithTax.html'
+                    }
+                ]
+            }
+        };
+        knownOperations.registerOperation(paymentInOperationForBP);
+
+        var shipmentOperationForBP = {
+            type: 'Shipment-Sub',
+            treeTemplateUrl: 'shipment-sub.tpl.html',
+            description: 'orders.blades.newOperation-wizard.menu.shipment-operation-bp.description',
+            detailBlade: {
+                template: 'Modules/$(VirtoCommerce.Orders)/Scripts/blades/shipment-detail-bp.tpl.html',
+                metaFields: [
+                    {
+                        name: 'number',
+                        isRequired: true,
+                        title: "orders.blades.shipment-detail.labels.shipment-number",
+                        valueType: "ShortText"
+                    },
+                    {
+                        name: 'createdDate',
+                        title: "orders.blades.shipment-detail.labels.from",
+                        templateUrl: 'createdDate.html'
+                    },
+                    {
+                        name: 'status',
+                        templateUrl: 'statusSelector.html'
+                    },
+                    {
+                        name: 'employeeId',
+                        title: "orders.blades.shipment-detail.labels.employee",
+                        templateUrl: 'shipment-employeeSelector.html'
+                    },
+                    {
+                        name: 'averagePrice',
+                        title: "orders.blades.shipment-detail.labels.price",
+                        templateUrl: 'price.html'
+                    },
+                    {
+                        name: 'averagePriceWithTax',
+                        title: "orders.blades.shipment-detail.labels.price-with-tax",
+                        templateUrl: 'priceWithTax.html'
+                    }
+                ]
+            }
+        };
+        knownOperations.registerOperation(shipmentOperationForBP);
+
         //Register widgets
         widgetService.registerWidget({
             controller: 'virtoCommerce.orderModule.notificationsLogWidgetController',
@@ -213,6 +345,19 @@ angular.module(moduleName, ['virtoCommerce.catalogModule', 'virtoCommerce.pricin
             template: 'Modules/$(VirtoCommerce.Orders)/Scripts/widgets/customerOrder-items-widget.tpl.html'
         };
         widgetService.registerWidget(operationItemsWidget, 'customerOrderDetailWidgets');
+
+        //For BP - Register widgets
+        widgetService.registerWidget({
+            controller: 'virtoCommerce.orderModule.notificationsLogWidgetController',
+            template: 'Modules/$(VirtoCommerce.Orders)/Scripts/widgets/notificationsLogWidget.tpl.html'
+        }, 'customerOrderDetailBpWidgets');
+
+        var operationItemsBpWidget = {
+            controller: 'virtoCommerce.orderModule.customerOrderItemsBpWidgetController',
+            template: 'Modules/$(VirtoCommerce.Orders)/Scripts/widgets/customerOrder-items-bp-widget.tpl.html'
+        };
+        widgetService.registerWidget(operationItemsBpWidget, 'customerOrderDetailBpWidgets');
+
 
         //Use the own order changes log blade, which extracts data from the order module API
         widgetService.registerWidget({
@@ -306,6 +451,100 @@ angular.module(moduleName, ['virtoCommerce.catalogModule', 'virtoCommerce.pricin
             template: 'Modules/$(VirtoCommerce.Orders)/Scripts/widgets/operation-tree-widget.tpl.html'
         };
         widgetService.registerWidget(operationsTreeWidget, 'customerOrderDetailWidgets');
+
+        //For BP - Use the own order changes log blade, which extracts data from the order module API
+        widgetService.registerWidget({
+            controller: 'virtoCommerce.orderModule.customerOrderChangeLogWidgetController',
+            template: 'Modules/$(VirtoCommerce.Orders)/Scripts/widgets/customerOrder-change-log-widget.tpl.html'
+        }, 'customerOrderDetailBpWidgets');
+
+        var shipmentItemsBpWidget = {
+            controller: 'virtoCommerce.orderModule.shipmentItemsBpWidgetController',
+            template: 'Modules/$(VirtoCommerce.Orders)/Scripts/widgets/shipment-items-bp-widget.tpl.html'
+        };
+        widgetService.registerWidget(shipmentItemsBpWidget, 'shipmentDetailBpWidgets');
+
+        widgetService.registerWidget({
+            controller: 'platformWebApp.changeLog.operationsWidgetController',
+            template: '$(Platform)/Scripts/app/changeLog/widgets/operations-widget.tpl.html'
+        }, 'shipmentDetailBpWidgets');
+
+        var customerOrderAddressBpWidget = {
+            controller: 'virtoCommerce.orderModule.customerOrderAddressWidgetController',
+            template: 'Modules/$(VirtoCommerce.Orders)/Scripts/widgets/customerOrder-address-widget.tpl.html'
+        };
+        widgetService.registerWidget(customerOrderAddressBpWidget, 'customerOrderDetailBpWidgets');
+
+        var customerOrderTotalsBpWidget = {
+            controller: 'virtoCommerce.orderModule.customerOrderTotalsBpWidgetController',
+            size: [2, 2],
+            template: 'Modules/$(VirtoCommerce.Orders)/Scripts/widgets/customerOrder-totals-bp-widget.tpl.html'
+        };
+        widgetService.registerWidget(customerOrderTotalsBpWidget, 'customerOrderDetailBpWidgets');
+
+
+        var operationCommentBpWidget = {
+            controller: 'virtoCommerce.orderModule.operationCommentWidgetController',
+            template: 'Modules/$(VirtoCommerce.Orders)/Scripts/widgets/operation-comment-bp-widget.tpl.html'
+        };
+        widgetService.registerWidget(operationCommentBpWidget, 'customerOrderDetailBpWidgets');
+        widgetService.registerWidget(operationCommentBpWidget, 'shipmentDetailBpWidgets');
+        widgetService.registerWidget(operationCommentBpWidget, 'paymentDetailBpWidgets');
+
+        var shipmentAddressBpWidget = {
+            controller: 'virtoCommerce.orderModule.shipmentAddressWidgetController',
+            size: [2, 1],
+            template: 'Modules/$(VirtoCommerce.Orders)/Scripts/widgets/shipment-address-widget.tpl.html'
+        };
+        widgetService.registerWidget(shipmentAddressBpWidget, 'shipmentDetailBpWidgets');
+
+
+        var shipmentTotalBpWidget = {
+            controller: 'virtoCommerce.orderModule.shipmentTotalsBpWidgetController',
+            size: [2, 1],
+            template: 'Modules/$(VirtoCommerce.Orders)/Scripts/widgets/shipment-totals-bp-widget.tpl.html'
+        };
+        widgetService.registerWidget(shipmentTotalBpWidget, 'shipmentDetailBpWidgets');
+
+        widgetService.registerWidget({
+            controller: 'virtoCommerce.orderModule.paymentAddressWidgetController',
+            size: [2, 1],
+            template: 'Modules/$(VirtoCommerce.Orders)/Scripts/widgets/payment-address-widget.tpl.html'
+        }, 'paymentDetailBpWidgets');
+
+        var paymentTotalBpWidget = {
+            controller: 'virtoCommerce.orderModule.paymentTotalsBpWidgetController',
+            size: [2, 1],
+            template: 'Modules/$(VirtoCommerce.Orders)/Scripts/widgets/payment-totals-bp-widget.tpl.html'
+        };
+        widgetService.registerWidget(paymentTotalBpWidget, 'paymentDetailBpWidgets');
+
+        var paymentTransactionsBpWidget = {
+            controller: 'virtoCommerce.orderModule.paymentTransactionsWidgetController',
+            size: [1, 1],
+            template: 'Modules/$(VirtoCommerce.Orders)/Scripts/widgets/payment-transactions-widget.tpl.html'
+        };
+        widgetService.registerWidget(paymentTransactionsBpWidget, 'paymentDetailBpWidgets');
+        widgetService.registerWidget({
+            controller: 'platformWebApp.changeLog.operationsWidgetController',
+            template: '$(Platform)/Scripts/app/changeLog/widgets/operations-widget.tpl.html'
+        }, 'paymentDetailBpWidgets');
+
+        var dynamicPropertyBpWidget = {
+            controller: 'platformWebApp.dynamicPropertyWidgetController',
+            template: '$(Platform)/Scripts/app/dynamicProperties/widgets/dynamicPropertyWidget.tpl.html'
+        };
+        widgetService.registerWidget(dynamicPropertyBpWidget, 'shipmentDetailPbWidgets');
+        widgetService.registerWidget(dynamicPropertyBpWidget, 'customerOrderDetailBpWidgets');
+        widgetService.registerWidget(dynamicPropertyBpWidget, 'paymentDetailBpWidgets');
+
+
+        var operationsTreeBpWidget = {
+            controller: 'virtoCommerce.orderModule.operationTreeBpWidgetController',
+            size: [4, 3],
+            template: 'Modules/$(VirtoCommerce.Orders)/Scripts/widgets/operation-tree-bp-widget.tpl.html'
+        };
+        widgetService.registerWidget(operationsTreeBpWidget, 'customerOrderDetailBpWidgets');
 
         // register dashboard widgets
         var statisticsController = 'virtoCommerce.orderModule.dashboard.statisticsWidgetController';

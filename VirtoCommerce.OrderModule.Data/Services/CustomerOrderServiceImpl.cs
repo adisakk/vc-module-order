@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Collections.ObjectModel;
 using VirtoCommerce.Domain.Commerce.Model.Search;
 using VirtoCommerce.Domain.Common;
 using VirtoCommerce.Domain.Common.Events;
@@ -81,6 +82,22 @@ namespace VirtoCommerce.OrderModule.Data.Services
                     }
                     else
                     {
+                        //Create sub operations for each product owners
+                        var productOwners = modifiedEntity.Items.GroupBy(x => x.ProductOwner).OrderByDescending(group => group.Count()).Select(group => group.Key);
+                        var subOperations = new ObservableCollection<SubOperationEntity>();
+                        foreach (var productOwner in productOwners)
+                        {
+                            var subOperation = new SubOperationEntity();
+                            subOperation.Comment = modifiedEntity.Comment;
+                            //subOperation.CreatedDate = modifiedEntity.CreatedDate;
+                            subOperation.Currency = modifiedEntity.Currency;
+                            subOperation.Number = modifiedEntity.Number;
+                            subOperation.OwnerName = productOwner;
+                            subOperation.Status = modifiedEntity.Status;
+                            subOperation.Sum = modifiedEntity.Sum;
+                            subOperations.Add(subOperation);
+                        }
+                        modifiedEntity.SubOperations = subOperations;
                         repository.Add(modifiedEntity);
                         changedEntries.Add(new GenericChangedEntry<CustomerOrder>(order, EntryState.Added));
                     }

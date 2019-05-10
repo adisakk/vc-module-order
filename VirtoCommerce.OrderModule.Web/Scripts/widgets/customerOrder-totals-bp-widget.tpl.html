@@ -1,0 +1,8 @@
+<ul class="list __prices">
+    <li class="list-item">{{'orders.widgets.customerOrder-totals.sub-total' | translate}} <span class="list-price">{{blade.customerOrder.subOperations[0].subTotal | currency:blade.customerOrder.currency}}</span></li>
+    <li class="list-item">{{'orders.widgets.customerOrder-totals.shipping-sub-total' | translate}} <span class="list-price">{{blade.customerOrder.subOperations[0].shippingTotal | currency:blade.customerOrder.currency}}</span></li>
+    <li class="list-item">{{'orders.widgets.customerOrder-totals.payment-sub-total' | translate}} <span class="list-price">{{blade.customerOrder.subOperations[0].paymentFees | currency:blade.customerOrder.currency}}</span></li>
+    <li class="list-item">{{'orders.widgets.customerOrder-totals.tax-total' | translate}} <span class="list-price">{{blade.customerOrder.subOperations[0].subTotalTaxTotal | currency:blade.customerOrder.currency}}</span></li>
+    <li class="list-item">{{'orders.widgets.customerOrder-totals.discount-total' | translate}} <span class="list-price"><span ng-if="blade.customerOrder.subOperations[0].SubTotalDiscount > 0"></span>{{(blade.customerOrder.subOperations[0].SubTotalDiscount * -1) | currency:blade.customerOrder.currency}}</span></li>
+    <li class="list-item __total">{{'orders.widgets.customerOrder-totals.total' | translate}} <span class="list-price">{{blade.customerOrder.subOperations[0].sum | currency:blade.customerOrder.currency}}</span></li>
+</ul>
