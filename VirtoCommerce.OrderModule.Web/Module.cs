@@ -160,8 +160,8 @@ namespace VirtoCommerce.OrderModule.Web
                 DisplayName = "The invoice for customer order",
                 NotificationTemplate = new NotificationTemplate
                 {
-                    Body = ShippingLabelResource.Body,
-                    Subject = ShippingLabelResource.Subject,
+                    //Body = ShippingLabelResource.Body,
+                    //Subject = ShippingLabelResource.Subject,
                     Language = "en-US"
                 }
             });
@@ -172,8 +172,8 @@ namespace VirtoCommerce.OrderModule.Web
                 DisplayName = "The invoice for customer order",
                 NotificationTemplate = new NotificationTemplate
                 {
-                    Body = DigitalContentResource.Body,
-                    Subject = DigitalContentResource.Subject,
+                    //Body = DigitalContentResource.Body,
+                    //Subject = DigitalContentResource.Subject,
                     Language = "en-US"
                 }
             });
