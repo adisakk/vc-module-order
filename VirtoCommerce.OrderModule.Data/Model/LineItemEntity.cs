@@ -88,6 +88,8 @@ namespace VirtoCommerce.OrderModule.Data.Model
         public virtual CustomerOrderEntity CustomerOrder { get; set; }
         public string CustomerOrderId { get; set; }
 
+        public virtual ObservableCollection<ShipmentItemEntity> ShipmentItems { get; set; } = new NullCollection<ShipmentItemEntity>();
+
         [StringLength(64)]
         public string ProductOwner { get; set; }
 
