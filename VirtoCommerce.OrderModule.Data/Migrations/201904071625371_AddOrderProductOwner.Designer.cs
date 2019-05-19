@@ -7,13 +7,13 @@ namespace VirtoCommerce.OrderModule.Data.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class AddProductOwner : IMigrationMetadata
+    public sealed partial class AddOrderProductOwner : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(AddProductOwner));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(AddOrderProductOwner));
         
         string IMigrationMetadata.Id
         {
-            get { return "201904071625371_AddProductOwner"; }
+            get { return "201904071625371_AddOrderProductOwner"; }
         }
         
         string IMigrationMetadata.Source

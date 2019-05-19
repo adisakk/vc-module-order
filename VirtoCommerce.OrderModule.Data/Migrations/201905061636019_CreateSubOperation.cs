@@ -3,7 +3,7 @@ namespace VirtoCommerce.OrderModule.Data.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class SubOperation : DbMigration
+    public partial class CreateSubOperation : DbMigration
     {
         public override void Up()
         {

@@ -3,16 +3,16 @@ namespace VirtoCommerce.OrderModule.Data.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class AddTrackingNumber : DbMigration
+    public partial class AddOrderProductOwner : DbMigration
     {
         public override void Up()
         {
-            AddColumn("dbo.OrderShipment", "TrackingNumber", c => c.String(maxLength: 30));
+            AddColumn("dbo.OrderLineItem", "ProductOwner", c => c.String(maxLength: 64));
         }
         
         public override void Down()
         {
-            DropColumn("dbo.OrderShipment", "TrackingNumber");
+            DropColumn("dbo.OrderLineItem", "ProductOwner");
         }
     }
 }
