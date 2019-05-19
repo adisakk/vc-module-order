@@ -79,8 +79,8 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="VirtoCommerce.Domain, Version=2.25.19.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\VirtoCommerce.Domain.2.25.19\lib\net461\VirtoCommerce.Domain.dll</HintPath>
+    <Reference Include="VirtoCommerce.Domain">
+      <HintPath>..\..\vc-module-core\VirtoCommerce.CoreModule.Web\bin\VirtoCommerce.Domain.dll</HintPath>
     </Reference>
     <Reference Include="VirtoCommerce.Platform.Core, Version=2.13.26.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -199,7 +199,7 @@
     <Compile Include="Migrations\201809140916230_AddedAmountColumnToPaymentInEntity.Designer.cs">
       <DependentUpon>201809140916230_AddedAmountColumnToPaymentInEntity.cs</DependentUpon>
     </Compile>
-	<Compile Include="Migrations\201902201946389_AddShipmentTrackingNumber.cs" />
+    <Compile Include="Migrations\201902201946389_AddShipmentTrackingNumber.cs" />
     <Compile Include="Migrations\201902201946389_AddShipmentTrackingNumber.Designer.cs">
       <DependentUpon>201902201946389_AddShipmentTrackingNumber.cs</DependentUpon>
     </Compile>
@@ -341,7 +341,7 @@
     <EmbeddedResource Include="Migrations\201809140916230_AddedAmountColumnToPaymentInEntity.resx">
       <DependentUpon>201809140916230_AddedAmountColumnToPaymentInEntity.cs</DependentUpon>
     </EmbeddedResource>
-	<EmbeddedResource Include="Migrations\201902201946389_AddShipmentTrackingNumber.resx">
+    <EmbeddedResource Include="Migrations\201902201946389_AddShipmentTrackingNumber.resx">
       <DependentUpon>201902201946389_AddShipmentTrackingNumber.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201902202003185_AddShipmentPickupDate.resx">
