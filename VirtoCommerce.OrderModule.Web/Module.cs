@@ -1,17 +1,15 @@
-using Microsoft.Practices.Unity;
 using System;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Web.Http;
+using Microsoft.Practices.Unity;
 using VirtoCommerce.CoreModule.Data.Services;
 using VirtoCommerce.Domain.Common;
-using VirtoCommerce.Domain.Inventory.Services;
 using VirtoCommerce.Domain.Order.Events;
 using VirtoCommerce.Domain.Order.Model;
 using VirtoCommerce.Domain.Order.Services;
 using VirtoCommerce.Domain.Payment.Services;
 using VirtoCommerce.Domain.Shipping.Services;
-using VirtoCommerce.Domain.Store.Services;
 using VirtoCommerce.OrderModule.Data.Handlers;
 using VirtoCommerce.OrderModule.Data.Notifications;
 using VirtoCommerce.OrderModule.Data.Repositories;
@@ -19,7 +17,6 @@ using VirtoCommerce.OrderModule.Data.Services;
 using VirtoCommerce.OrderModule.Web.ExportImport;
 using VirtoCommerce.OrderModule.Web.JsonConverters;
 using VirtoCommerce.OrderModule.Web.Model;
-using VirtoCommerce.OrderModule.Web.Resources;
 using VirtoCommerce.OrderModule.Web.Security;
 using VirtoCommerce.Platform.Core.Bus;
 using VirtoCommerce.Platform.Core.Common;
@@ -36,7 +33,7 @@ namespace VirtoCommerce.OrderModule.Web
     public class Module : ModuleBase, ISupportExportImportModule
     {
         private readonly string _connectionString = ConfigurationHelper.GetConnectionStringValue("VirtoCommerce.Orders") ?? ConfigurationHelper.GetConnectionStringValue("VirtoCommerce");
-        private readonly IUnityContainer _container; 
+        private readonly IUnityContainer _container;
 
         public Module(IUnityContainer container)
         {
@@ -83,6 +80,7 @@ namespace VirtoCommerce.OrderModule.Web
             var numberFormatSettings = settingManager.GetModuleSettings("VirtoCommerce.Orders").Where(x => x.Name.EndsWith("NewNumberTemplate")).ToArray();
             settingManager.RegisterModuleSettings("VirtoCommerce.Store", numberFormatSettings);
 
+            var assembly = typeof(IOrderRepository).Assembly;
             var notificationManager = _container.Resolve<INotificationManager>();
             notificationManager.RegisterNotificationType(() => new OrderCreateEmailNotification(_container.Resolve<IEmailNotificationSendingGateway>())
             {
@@ -90,8 +88,8 @@ namespace VirtoCommerce.OrderModule.Web
                 Description = "This notification sends by email to client when he create order",
                 NotificationTemplate = new NotificationTemplate
                 {
-                    Body = OrderNotificationResource.CreateOrderNotificationBody,
-                    Subject = OrderNotificationResource.CreateOrderNotificationSubject,
+                    Body = assembly.GetManifestResourceStream("VirtoCommerce.OrderModule.Data.Notifications.Templates.CreateOrderNotificationTemplateBody.html").ReadToString(),
+                    Subject = assembly.GetManifestResourceStream("VirtoCommerce.OrderModule.Data.Notifications.Templates.CreateOrderNotificationTemplateSubject.html").ReadToString(),
                     Language = "en-US"
                 }
             });
@@ -102,8 +100,8 @@ namespace VirtoCommerce.OrderModule.Web
                 Description = "This notification sends by email to client when all payments of order has status paid",
                 NotificationTemplate = new NotificationTemplate
                 {
-                    Body = OrderNotificationResource.OrderPaidNotificationBody,
-                    Subject = OrderNotificationResource.OrderPaidNotificationSubject,
+                    Body = assembly.GetManifestResourceStream("VirtoCommerce.OrderModule.Data.Notifications.Templates.OrderPaidNotificationTemplateBody.html").ReadToString(),
+                    Subject = assembly.GetManifestResourceStream("VirtoCommerce.OrderModule.Data.Notifications.Templates.OrderPaidNotificationTemplateSubject.html").ReadToString(),
                     Language = "en-US"
                 }
             });
@@ -114,8 +112,8 @@ namespace VirtoCommerce.OrderModule.Web
                 Description = "This notification sends by email to client when all shipments gets status sent",
                 NotificationTemplate = new NotificationTemplate
                 {
-                    Body = OrderNotificationResource.OrderSentNotificationBody,
-                    Subject = OrderNotificationResource.OrderSentNotificationSubject,
+                    Body = assembly.GetManifestResourceStream("VirtoCommerce.OrderModule.Data.Notifications.Templates.OrderSentNotificationTemplateBody.html").ReadToString(),
+                    Subject = assembly.GetManifestResourceStream("VirtoCommerce.OrderModule.Data.Notifications.Templates.OrderSentNotificationTemplateSubject.html").ReadToString(),
                     Language = "en-US"
                 }
             });
@@ -126,8 +124,8 @@ namespace VirtoCommerce.OrderModule.Web
                 Description = "This notification sends by email to client when status of orders has been changed",
                 NotificationTemplate = new NotificationTemplate
                 {
-                    Body = OrderNotificationResource.NewOrderStatusNotificationBody,
-                    Subject = OrderNotificationResource.NewOrderStatusNotificatonSubject,
+                    Body = assembly.GetManifestResourceStream("VirtoCommerce.OrderModule.Data.Notifications.Templates.NewOrderStatusNotificationTemplateBody.html").ReadToString(),
+                    Subject = assembly.GetManifestResourceStream("VirtoCommerce.OrderModule.Data.Notifications.Templates.NewOrderStatusNotificationTemplateSubject.html").ReadToString(),
                     Language = "en-US"
                 }
             });
@@ -138,8 +136,8 @@ namespace VirtoCommerce.OrderModule.Web
                 Description = "This notification sends by email to client when order canceled",
                 NotificationTemplate = new NotificationTemplate
                 {
-                    Body = OrderNotificationResource.CancelOrderNotificationBody,
-                    Subject = OrderNotificationResource.CancelOrderNotificationSubject,
+                    Body = assembly.GetManifestResourceStream("VirtoCommerce.OrderModule.Data.Notifications.Templates.CancelOrderNotificationTemplateBody.html").ReadToString(),
+                    Subject = assembly.GetManifestResourceStream("VirtoCommerce.OrderModule.Data.Notifications.Templates.CancelOrderNotificationTemplateSubject.html").ReadToString(),
                     Language = "en-US"
                 }
             });
@@ -150,8 +148,8 @@ namespace VirtoCommerce.OrderModule.Web
                 DisplayName = "The invoice for customer order",
                 NotificationTemplate = new NotificationTemplate
                 {
-                    Body = InvoiceResource.Body,
-                    Subject = InvoiceResource.Subject,
+                    Body = assembly.GetManifestResourceStream("VirtoCommerce.OrderModule.Data.Notifications.Templates.InvoiceNotificationTemplateBody.html").ReadToString(),
+                    Subject = assembly.GetManifestResourceStream("VirtoCommerce.OrderModule.Data.Notifications.Templates.InvoiceNotificationTemplateSubject.html").ReadToString(),
                     Language = "en-US"
                 }
             });

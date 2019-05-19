@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -10,7 +11,7 @@ using VirtoCommerce.Platform.Core.Common;
 
 namespace VirtoCommerce.OrderModule.Data.Model
 {
-    public class LineItemEntity : AuditableEntity
+    public class LineItemEntity : AuditableEntity, ISupportPartialPriceUpdate
     {
         [StringLength(128)]
         public string PriceId { get; set; }
@@ -134,16 +135,11 @@ namespace VirtoCommerce.OrderModule.Data.Model
         public virtual void Patch(LineItemEntity target)
         {
             if (target == null)
+            {
                 throw new ArgumentNullException(nameof(target));
+            }
 
-
-            target.Price = Price;
-            target.PriceWithTax = PriceWithTax;
-            target.DiscountAmount = DiscountAmount;
-            target.DiscountAmountWithTax = DiscountAmountWithTax;
             target.Quantity = Quantity;
-            target.TaxTotal = TaxTotal;
-            target.TaxPercentRate = TaxPercentRate;
             target.Weight = Weight;
             target.Height = Height;
             target.Width = Width;
@@ -157,6 +153,16 @@ namespace VirtoCommerce.OrderModule.Data.Model
             target.Comment = Comment;
             target.ProductOwner = ProductOwner;
 
+            if (!(GetNonCalculatablePrices().All(x => x == 0m) && target.GetNonCalculatablePrices().Any(x => x != 0m)))
+            {
+                target.TaxPercentRate = TaxPercentRate;
+                target.Price = Price;
+                target.DiscountAmount = DiscountAmount;
+                target.PriceWithTax = PriceWithTax;
+                target.DiscountAmountWithTax = DiscountAmountWithTax;
+                target.TaxTotal = TaxTotal;
+            }
+
             if (!Discounts.IsNullCollection())
             {
                 var discountComparer = AnonymousComparer.Create((DiscountEntity x) => x.PromotionId);
@@ -168,6 +174,23 @@ namespace VirtoCommerce.OrderModule.Data.Model
                 var taxDetailComparer = AnonymousComparer.Create((TaxDetailEntity x) => x.Name);
                 TaxDetails.Patch(target.TaxDetails, taxDetailComparer, (sourceTaxDetail, targetTaxDetail) => sourceTaxDetail.Patch(targetTaxDetail));
             }
+        }
+
+        public virtual void ResetPrices()
+        {
+            Price = 0m;
+            PriceWithTax = 0m;
+            DiscountAmount = 0m;
+            DiscountAmountWithTax = 0m;
+            TaxTotal = 0m;
+            TaxPercentRate = 0m;
+        }
+
+        public virtual IEnumerable<decimal> GetNonCalculatablePrices()
+        {
+            yield return TaxPercentRate;
+            yield return Price;
+            yield return DiscountAmount;
         }
     }
 }

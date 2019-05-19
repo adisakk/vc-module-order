@@ -73,14 +73,14 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="VirtoCommerce.Domain, Version=2.25.13.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\vc-module-core\VirtoCommerce.Domain\bin\Release\VirtoCommerce.Domain.dll</HintPath>
+    <Reference Include="VirtoCommerce.Domain, Version=2.25.19.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VirtoCommerce.Domain.2.25.19\lib\net461\VirtoCommerce.Domain.dll</HintPath>
     </Reference>
     <Reference Include="VirtoCommerce.Platform.Core, Version=2.13.26.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -199,7 +199,7 @@
     <Compile Include="Migrations\201809140916230_AddedAmountColumnToPaymentInEntity.Designer.cs">
       <DependentUpon>201809140916230_AddedAmountColumnToPaymentInEntity.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201902201946389_AddShipmentTrackingNumber.cs" />
+	<Compile Include="Migrations\201902201946389_AddShipmentTrackingNumber.cs" />
     <Compile Include="Migrations\201902201946389_AddShipmentTrackingNumber.Designer.cs">
       <DependentUpon>201902201946389_AddShipmentTrackingNumber.cs</DependentUpon>
     </Compile>
@@ -215,10 +215,15 @@
     <Compile Include="Migrations\201905061636019_CreateSubOperation.Designer.cs">
       <DependentUpon>201905061636019_CreateSubOperation.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904090807084_AddReadPricesPermissionForExistingRoles.cs" />
+    <Compile Include="Migrations\201904090807084_AddReadPricesPermissionForExistingRoles.Designer.cs">
+      <DependentUpon>201904090807084_AddReadPricesPermissionForExistingRoles.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\AddressEntity.cs" />
     <Compile Include="Model\CustomerOrderEntity.cs" />
     <Compile Include="Model\DiscountEntity.cs" />
+    <Compile Include="Model\ISupportPartialPriceUpdate.cs" />
     <Compile Include="Model\LineItemEntity.cs" />
     <Compile Include="Model\OperationEntity.cs" />
     <Compile Include="Model\PaymentGatewayTransactionEntity.cs" />
@@ -336,7 +341,7 @@
     <EmbeddedResource Include="Migrations\201809140916230_AddedAmountColumnToPaymentInEntity.resx">
       <DependentUpon>201809140916230_AddedAmountColumnToPaymentInEntity.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201902201946389_AddShipmentTrackingNumber.resx">
+	<EmbeddedResource Include="Migrations\201902201946389_AddShipmentTrackingNumber.resx">
       <DependentUpon>201902201946389_AddShipmentTrackingNumber.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201902202003185_AddShipmentPickupDate.resx">
@@ -348,10 +353,27 @@
     <EmbeddedResource Include="Migrations\201905061636019_CreateSubOperation.resx">
       <DependentUpon>201905061636019_CreateSubOperation.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904090807084_AddReadPricesPermissionForExistingRoles.resx">
+      <DependentUpon>201904090807084_AddReadPricesPermissionForExistingRoles.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\OrderResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>OrderResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Notifications\Templates\CancelOrderNotificationTemplateBody.html" />
+    <EmbeddedResource Include="Notifications\Templates\CancelOrderNotificationTemplateSubject.html" />
+    <EmbeddedResource Include="Notifications\Templates\CreateOrderNotificationTemplateBody.html" />
+    <EmbeddedResource Include="Notifications\Templates\CreateOrderNotificationTemplateSubject.html" />
+    <EmbeddedResource Include="Notifications\Templates\InvoiceNotificationTemplateBody.html" />
+    <EmbeddedResource Include="Notifications\Templates\InvoiceNotificationTemplateSubject.html" />
+    <EmbeddedResource Include="Notifications\Templates\NewOrderStatusNotificationTemplateBody.html" />
+    <EmbeddedResource Include="Notifications\Templates\NewOrderStatusNotificationTemplateSubject.html" />
+    <EmbeddedResource Include="Notifications\Templates\OrderPaidNotificationTemplateBody.html" />
+    <EmbeddedResource Include="Notifications\Templates\OrderPaidNotificationTemplateSubject.html" />
+    <EmbeddedResource Include="Notifications\Templates\OrderSentNotificationTemplateBody.html" />
+    <EmbeddedResource Include="Notifications\Templates\OrderSentNotificationTemplateSubject.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

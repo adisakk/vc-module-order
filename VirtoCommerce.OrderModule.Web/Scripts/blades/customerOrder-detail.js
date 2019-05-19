@@ -1,7 +1,9 @@
 angular.module('virtoCommerce.orderModule')
-    .controller('virtoCommerce.orderModule.customerOrderDetailController', ['$scope', '$window', 'platformWebApp.bladeNavigationService', 'platformWebApp.dialogService', 'virtoCommerce.orderModule.order_res_stores', 'platformWebApp.settings', 'virtoCommerce.customerModule.members', 'virtoCommerce.customerModule.memberTypesResolverService', 'virtoCommerce.orderModule.statusTranslationService', 'virtoCommerce.orderModule.securityAccounts',
-    function ($scope, $window, bladeNavigationService, dialogService, order_res_stores, settings, members, memberTypesResolverService, statusTranslationService, securityAccounts) {
+    .controller('virtoCommerce.orderModule.customerOrderDetailController', ['$scope', '$window', 'platformWebApp.bladeNavigationService', 'platformWebApp.dialogService', 'virtoCommerce.orderModule.order_res_stores', 'platformWebApp.settings', 'virtoCommerce.customerModule.members', 'virtoCommerce.customerModule.memberTypesResolverService', 'virtoCommerce.orderModule.statusTranslationService', 'virtoCommerce.orderModule.securityAccounts', 'platformWebApp.authService',
+    function ($scope, $window, bladeNavigationService, dialogService, order_res_stores, settings, members, memberTypesResolverService, statusTranslationService, securityAccounts, authService) {
         var blade = $scope.blade;
+
+        blade.isVisiblePrices = authService.checkPermission('order:read_prices');
 
         angular.extend(blade, {
             title: 'orders.blades.customerOrder-detail.title',
@@ -33,19 +35,18 @@ angular.module('virtoCommerce.orderModule')
             blade.statuses = statusTranslationService.translateStatuses(data, 'customerOrder');
         }
 
-        function showCustomerDetailBlade(memberId) {
-            var customerMemberType = 'Contact';
-            var foundTemplate = memberTypesResolverService.resolve(customerMemberType);
+        function showCustomerDetailBlade(member) {
+            var foundTemplate = memberTypesResolverService.resolve(member.memberType);
             if (foundTemplate) {
                 var newBlade = angular.copy(foundTemplate.detailBlade);
-                newBlade.currentEntity = { id: memberId, memberType: customerMemberType };
+                newBlade.currentEntity = member;
                 bladeNavigationService.showBlade(newBlade, blade);
             } else {
                 dialogService.showNotificationDialog({
                     id: "error",
                     title: "customer.dialogs.unknown-member-type.title",
                     message: "customer.dialogs.unknown-member-type.message",
-                    messageValues: { memberType: customerMemberType },
+                    messageValues: { memberType: member.memberType }
                 });
             }
         }
@@ -55,12 +56,13 @@ angular.module('virtoCommerce.orderModule')
                 if (!member.id) {
                     securityAccounts.get({ id: blade.customerOrder.customerId }, function (account) {
                         if (account && account.memberId) {
-                            showCustomerDetailBlade(account.memberId);
+                            var member = { id: account.memberId, memberType: 'Contact' };
+                            showCustomerDetailBlade(member);
                         }
                     });
                 }
                 else {
-                    showCustomerDetailBlade(member.id);
+                    showCustomerDetailBlade(member);
                 }
             });
          
