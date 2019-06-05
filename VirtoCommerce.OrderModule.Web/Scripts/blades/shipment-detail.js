@@ -1,6 +1,6 @@
 angular.module('virtoCommerce.orderModule')
-.controller('virtoCommerce.orderModule.shipmentDetailController', ['$scope', 'platformWebApp.bladeNavigationService', 'platformWebApp.dialogService', 'platformWebApp.settings', 'virtoCommerce.orderModule.order_res_customerOrders', 'virtoCommerce.orderModule.order_res_fulfilmentCenters', 'virtoCommerce.orderModule.statusTranslationService', 'platformWebApp.authService',
-    function ($scope, bladeNavigationService, dialogService, settings, customerOrders, order_res_fulfilmentCenters, statusTranslationService, authService) {
+.controller('virtoCommerce.orderModule.shipmentDetailController', ['$window','$scope', 'platformWebApp.bladeNavigationService', 'platformWebApp.dialogService', 'platformWebApp.settings', 'virtoCommerce.orderModule.order_res_customerOrders', 'virtoCommerce.orderModule.order_res_fulfilmentCenters', 'virtoCommerce.orderModule.statusTranslationService', 'platformWebApp.authService',
+    function ($window, $scope, bladeNavigationService, dialogService, settings, customerOrders, order_res_fulfilmentCenters, statusTranslationService, authService) {
         var blade = $scope.blade;
 
         blade.isVisiblePrices = authService.checkPermission('order:read_prices');
@@ -54,9 +54,7 @@ angular.module('virtoCommerce.orderModule')
             icon: 'fa fa-download',
             //index: 5,
             executeMethod: function (blade) {
-                var labelUrl = 'api/order/customerOrders/shippingLabel/' + blade.customerOrder.number;
-                //alert("labelUrl: " + labelUrl);
-                $window.open(labelUrl, '_blank');
+                $window.open('api/order/customerOrders/shippingLabel/' + blade.customerOrder.number, '_blank');
                 
             },
             canExecuteMethod: function () {

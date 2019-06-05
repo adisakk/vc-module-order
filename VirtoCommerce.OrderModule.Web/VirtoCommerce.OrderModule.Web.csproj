@@ -173,16 +173,6 @@
     <Content Include="Scripts\blades\shipment-items-bp.js" />
     <Content Include="Scripts\blades\shipment-items-bp.tpl.html" />
     <Content Include="Scripts\resources\securityAccounts.js" />
-    <Compile Include="Resources\DigitalContentResource.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DigitalContentResource.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\ShippingLabelResource.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ShippingLabelResource.resx</DependentUpon>
-    </Compile>
     <Compile Include="Security\OrderPredefinedPermissions.cs" />
     <Compile Include="ExportImport\OrderExportImport.cs" />
     <Compile Include="Model\DashboardStatisticsResult.cs" />
@@ -300,17 +290,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Converters\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\DigitalContentResource.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>DigitalContentResource.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ShippingLabelResource.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ShippingLabelResource.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

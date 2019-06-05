@@ -156,24 +156,12 @@ namespace VirtoCommerce.OrderModule.Web
 
             notificationManager.RegisterNotificationType(() => new ShippingEmailNotification(_container.Resolve<IEmailNotificationSendingGateway>())
             {
-                Description = "The template for for customer order invoice (used for PDF generation)",
-                DisplayName = "The invoice for customer order",
+                Description = "The template for shipping label (used for PDF generation)",
+                DisplayName = "The shipping label customer order",
                 NotificationTemplate = new NotificationTemplate
                 {
-                    //Body = ShippingLabelResource.Body,
-                    //Subject = ShippingLabelResource.Subject,
-                    Language = "en-US"
-                }
-            });
-
-            notificationManager.RegisterNotificationType(() => new DigitalContentEmailNotification(_container.Resolve<IEmailNotificationSendingGateway>())
-            {
-                Description = "The template for for customer order invoice (used for PDF generation)",
-                DisplayName = "The invoice for customer order",
-                NotificationTemplate = new NotificationTemplate
-                {
-                    //Body = DigitalContentResource.Body,
-                    //Subject = DigitalContentResource.Subject,
+                    Body = assembly.GetManifestResourceStream("VirtoCommerce.OrderModule.Data.Notifications.Templates.ShippingLabelNotificationTemplateBody.html").ReadToString(),
+                    Subject = assembly.GetManifestResourceStream("VirtoCommerce.OrderModule.Data.Notifications.Templates.ShippingLabelNotificationTemplateSubject.html").ReadToString(),
                     Language = "en-US"
                 }
             });

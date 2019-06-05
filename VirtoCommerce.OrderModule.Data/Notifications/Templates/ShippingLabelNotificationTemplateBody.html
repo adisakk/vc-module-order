@@ -1,0 +1,50 @@
+<html>
+<head>
+</head>
+<body style="font-family: Arial, Helvetica, sans-serif;">
+    <div style="border: 1px solid #E0DCDA;">
+        <div style="background-color: #FFF; margin: 2px; padding: 10px;">
+            <table style="width: 600px; padding: 5px;" border: 1px solid #E0DCDA;>
+                <tr>
+                    <td style="width: 300px;"><img src="https://cn.lnwfile.com/_/cn/_raw/7i/49/j8.png" width="240" /></td>
+                    <td style="width: 300px;"><img src="https://www.nationwidebarcode.com/wp-content/uploads/2010/12/scc_sample.jpg" width="150" /></td>
+                </tr>
+            </table>
+        </div>
+        <div style="font-size: 12px; padding: 10px; background-color: #E0DCDA;">
+            <div style="display: inline-block;">
+                <span style="width: 300px;"><strong>Order Date</strong></span>
+                <span style="width: 300px;"><strong>Order Number</strong></span>
+            </div>
+            <div>
+                <span style="width: 300px;">{{ customer_order.created_date }}</span>
+                <span style="width: 300px;">{{ customer_order.number }}</span>
+            </div>
+        </div>
+        <div style="padding: 5px;">
+            <p><strong>Ship from:</strong></p>
+        </div>
+        <div style="background-color: #F3F3F3; font-size: 12px; margin: 2px; padding: 15px;">
+            <div>
+                <span style="width: 300px;">Giving Forward Co.,Ltd.</span>
+            </div>
+            <div>
+                <span style="width: 300px;">75/6 Rom Klao Soi 1 Saen Saep, Min Buri, Bangkok 10510 Tel. 02-026-3395 ext. 2701-2705 </span>
+            </div>
+        </div>
+        <div style="padding: 5px;">
+            <p><strong>Ship to:</strong></p>
+        </div>
+
+        <div style="background-color: #F3F3F3; font-size: 12px; margin: 2px; padding: 15px;">
+            <div>
+                <span style="width: 300px;">{{ customer_order.customer_name }}</span>
+                
+            </div>
+            <div>
+                <span style="width: 300px;">{{ customer_order.addresses }}</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
