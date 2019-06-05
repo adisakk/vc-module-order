@@ -154,6 +154,7 @@ namespace VirtoCommerce.OrderModule.Data.Model
             target.CancelReason = CancelReason;
             target.Comment = Comment;
             target.ProductOwner = ProductOwner;
+            target.ProductType = ProductType;
 
             if (!(GetNonCalculatablePrices().All(x => x == 0m) && target.GetNonCalculatablePrices().Any(x => x != 0m)))
             {
