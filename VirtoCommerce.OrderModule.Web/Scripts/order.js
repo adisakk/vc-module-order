@@ -542,7 +542,7 @@ angular.module(moduleName, ['virtoCommerce.catalogModule', 'virtoCommerce.pricin
             template: '$(Platform)/Scripts/app/dynamicProperties/widgets/dynamicPropertyWidget.tpl.html'
         };
         widgetService.registerWidget(dynamicPropertyBpWidget, 'shipmentDetailPbWidgets');
-        widgetService.registerWidget(dynamicPropertyBpWidget, 'customerOrderDetailBpWidgets');
+        //widgetService.registerWidget(dynamicPropertyBpWidget, 'customerOrderDetailBpWidgets');
         widgetService.registerWidget(dynamicPropertyBpWidget, 'paymentDetailBpWidgets');
 
 
