@@ -1,13 +1,65 @@
 <html>
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style>
+        /* DivTable.com */
+        .divTable {
+            display: table;
+            width: 100%;
+        }
+
+        .divTableRow {
+            display: table-row;
+        }
+
+        .divTableHeading {
+            background-color: #EEE;
+            display: table-header-group;
+        }
+
+        .divTableCell, .divTableHead {
+            border: 0px solid #F9F9F9;
+            display: table-cell;
+            padding: 3px 10px;
+        }
+
+        .divTableHeading {
+            background-color: #EEE;
+            display: table-header-group;
+            font-weight: bold;
+        }
+
+        .divTableFoot {
+            background-color: #EEE;
+            display: table-footer-group;
+            font-weight: bold;
+        }
+
+        .divTableBody {
+            display: table-row-group;
+        }
+    </style>
 </head>
-<body style="font-family: Arial, Helvetica, sans-serif;">
-    <div style="border: 1px solid #E0DCDA;">
+<body style="font-family: Tahoma, sans-serif">
+    <div style="font-size: 13px; border: 1px solid #E0DCDA;">
         <div style="background-color: #E0DCDA; margin: 2px; padding: 10px;">
             <span style="width: 400px;">Invoice Details {{ customer_order.number }}</span>
             <span style="width: 400px;">Status: {{ customer_order.status }}</span>
         </div>
-        <img src="http://www.startupguys.net/wp-content/uploads/2016/03/virto-commerce-logo.png" width="150" />
+        <div style="margin: 5px; padding: 5px;">
+            <img src="https://gfmarket.givingforward.co.th/admin/Content/themes/main/images/Logo_Motto_1x.png" width="150" />
+        </div>
+        <div style="margin: 5px; padding: 5px;">
+            <div style="font-weight: bold">Giving Forward Company Limited</div>
+            <div>Tax Id: 0125564444379</div>
+            <div>Address: 75/6 Rom Klao Soi 1 Khwaeng Saen Saep, Khet Min Buri, Bangkok 10510 Tel. 02-026-3395 ext. 2701-2705</div>
+        </div>
+        <div style="margin: 5px; padding: 5px;">
+            <div style="font-weight: bold">Customer: {{ customer_order.customer_name }}</div>
+            <div>Tax Id: {{ customer_order.customer_tax_id | currency:'USD' }}</div>
+            <div>Address: {{ customer_order.customer_address.line1 }}, {{ customer_order.customer_address.city }} {{ customer_order.customer_address.postal_code }} Tel. {{ customer_order.customer_address.phone }}</div>
+        </div>
+
         <div style="font-size: 12px; padding: 10px;">
             <div style="display: inline-block;">
                 <span style="width: 150px;"><strong>Order Date</strong></span>
@@ -33,45 +85,51 @@
             <tr>
                 <td style="text-align: center; vertical-align: top; width: 30px;"><p>{{ forloop.index }}</p></td>
                 <td style="vertical-align: top; width: 200px;"><p>{{ line_item.name }}</p><p style="color: #999; font-size: 11px;">SKU: {{ line_item.sku }}</p></td>
-                <td style="text-align: center; vertical-align: top; width: 100px;"><p>${{ line_item.placed_price | round: 2 }}</p></td>
+                <td style="text-align: center; vertical-align: top; width: 100px;"><p>{{ line_item.placed_price_formatted}}</p></td>
                 <td style="text-align: center; vertical-align: top; width: 100px;"><p>{{ line_item.quantity }}</p></td>
-                <td style="text-align: center; vertical-align: top; width: 100px;"><p>${{ line_item.extended_price | round: 2 }}</p></td>
+                <td style="text-align: center; vertical-align: top; width: 100px;"><p>{{ line_item.extended_price_formatted}}</p></td>
             </tr>
             {% endfor %}
         </table>
         <div style="background-color: #F9F9F9; font-size: 12px; margin: 2px; padding: 10px;">
-            <div>
-                <span style="width: 300px;"></span>
-                <span style="width: 100px;">Shipping:</span>
-                <span style="width: 100px;">${{ customer_order.shipping_total | round: 2 }}</span>
+
+            <div class="divTable" style="width: 100%; border: 0px solid #F9F9F9;">
+                <div class="divTableBody">
+                    <div class="divTableRow">
+                        <div class="divTableCell" style="width:270px">&nbsp;</div>
+                        <div class="divTableCell" style="width:115px">Shipping:</div>
+                        <div class="divTableCell" style="width:115px" align="right">{{ customer_order.shipping_total_formatted}}</div>
+                    </div>
+                    <div class="divTableRow">
+                        <div class="divTableCell" style="width:270px">&nbsp;</div>
+                        <div class="divTableCell" style="width:115px">Total Fees:</div>
+                        <div class="divTableCell" style="width:115px" align="right">{{ customer_order.fee_total_formatted}}</div>
+                    </div>
+                    <br />
+                    <div class="divTableRow">
+                        <div class="divTableCell" style="width:270px">&nbsp;</div>
+                        <div class="divTableCell" style="width:115px">Order Subtotal:</div>
+                        <div class="divTableCell" style="width:115px" align="right">{{ customer_order.sub_total_formatted}}</div>
+                    </div>
+                    <div class="divTableRow">
+                        <div class="divTableCell" style="width:270px">&nbsp;</div>
+                        <div class="divTableCell" style="width:115px">GST:</div>
+                        <div class="divTableCell" style="width:115px" align="right">{{ customer_order.tax_total_formatted}}</div>
+                    </div>
+                    <br />
+                    <div class="divTableRow">
+                        <div class="divTableCell" style="width:270px">&nbsp;</div>
+                        <div class="divTableCell" style="font-size: 13px; width:115px"><strong>Total:</strong></div>
+                        <div class="divTableCell" style="font-size: 13px; width:115px" align="right"><strong>{{ customer_order.total_formatted}}</strong></div>
+                    </div>
+                    <div class="divTableRow">
+                        <div class="divTableCell" style="width:270px">&nbsp;</div>
+                        <div class="divTableCell" style="width:115px">Currency:</div>
+                        <div class="divTableCell" style="width:115px" align="right">{{ customer_order.currency }}</div>
+                    </div>
+                </div>
             </div>
-            <div>
-                <span style="width: 300px;"></span>
-                <span style="width: 100px;">Total Fees:</span>
-                <span style="width: 100px;">${{ customer_order.fee_total | round: 2 }}</span>
-            </div>
-            <br />
-            <div>
-                <span style="width: 300px;"></span>
-                <span style="width: 100px;">Order Subtotal:</span>
-                <span style="width: 100px;">${{ customer_order.sub_total | round: 2 }}</span>
-            </div>
-            <div>
-                <span style="width: 300px;"></span>
-                <span style="width: 100px;">GST:</span>
-                <span style="width: 100px;">${{ customer_order.tax_total | round: 2 }}</span>
-            </div>
-            <br />
-            <div>
-                <span style="width: 300px;"></span>
-                <span style="font-size: 14px; width: 100px;"><strong>Total:</strong></span>
-                <span style="font-size: 14px; width: 100px;"><strong>${{ customer_order.total | round: 2 }}</strong></span>
-            </div>
-            <div>
-                <span style="width: 300px;"></span>
-                <span style="width: 100px;">Currency:</span>
-                <span style="width: 100px;">{{ customer_order.currency }}</span>
-            </div>
+
         </div>
     </div>
 </body>

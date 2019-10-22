@@ -15,6 +15,7 @@ using Microsoft.Practices.ObjectBuilder2;
 using TheArtOfDev.HtmlRenderer.PdfSharp;
 using VirtoCommerce.Domain.Cart.Services;
 using VirtoCommerce.Domain.Common;
+using VirtoCommerce.Domain.Customer.Services;
 using VirtoCommerce.Domain.Order.Model;
 using VirtoCommerce.Domain.Order.Services;
 using VirtoCommerce.Domain.Payment.Model;
@@ -53,6 +54,7 @@ namespace VirtoCommerce.OrderModule.Web.Controllers.Api
         private readonly INotificationTemplateResolver _notificationTemplateResolver;
         private readonly IChangeLogService _changeLogService;
         private readonly ICustomerOrderTotalsCalculator _totalsCalculator;
+        private readonly IMemberService _memberService;
         private static readonly object _lockObject = new object();
 
         public OrderModuleController(
@@ -69,7 +71,8 @@ namespace VirtoCommerce.OrderModule.Web.Controllers.Api
             INotificationManager notificationManager,
             INotificationTemplateResolver notificationTemplateResolver,
             IChangeLogService changeLogService,
-            ICustomerOrderTotalsCalculator totalsCalculator)
+            ICustomerOrderTotalsCalculator totalsCalculator,
+            IMemberService memberService)
         {
             _customerOrderService = customerOrderService;
             _searchService = searchService;
@@ -85,6 +88,7 @@ namespace VirtoCommerce.OrderModule.Web.Controllers.Api
             _notificationTemplateResolver = notificationTemplateResolver;
             _changeLogService = changeLogService;
             _totalsCalculator = totalsCalculator;
+            _memberService = memberService;
         }
 
         /// <summary>
@@ -619,7 +623,7 @@ namespace VirtoCommerce.OrderModule.Web.Controllers.Api
         [HttpGet]
         [Route("invoice/{orderNumber}")]
         [SwaggerFileResponse]
-        public IHttpActionResult GetInvoicePdf(string orderNumber)
+        public async Task<IHttpActionResult> GetInvoicePdfAsync(string orderNumber)
         {
             var searchCriteria = AbstractTypeFactory<CustomerOrderSearchCriteria>.TryCreateInstance();
             searchCriteria.Number = orderNumber;
@@ -632,8 +636,42 @@ namespace VirtoCommerce.OrderModule.Web.Controllers.Api
             {
                 throw new InvalidOperationException($"Cannot find order with number {orderNumber}");
             }
-
+            
             var invoice = _notificationManager.GetNewNotification<InvoiceEmailNotification>(order.StoreId, "Store", order.LanguageCode);
+
+            // Load CustomerTaxId and CustomerAddress
+            var user = await _securityService.FindByIdAsync(order.CustomerId, UserDetails.Full);
+            if (user != null)
+            {
+                var members = _memberService.GetByIds(new[] { user.MemberId });
+                foreach (var member in members)
+                {
+                    order.CustomerAddress = member.Addresses.FirstOrDefault();
+                    var idNumber = member.DynamicProperties.FirstOrDefault(x => x.Name == "IdNumber");
+                    if (idNumber != null && idNumber.Values != null && idNumber.Values.FirstOrDefault() != null
+                        && idNumber.Values.FirstOrDefault().Value != null)
+                    {
+                        order.CustomerTaxId = idNumber.Values.FirstOrDefault().Value.ToString();
+                    }
+                }
+            } else
+            {
+                order.CustomerTaxId = "Data not found.";
+            }
+
+            // TODO Change this quick workaround to a better solution.
+            // Create duplicate price member as formatted string to show in invoice
+            // because AngularJs currency did not formatting correctly via _notificationTemplateResolver.ResolveTemplate.
+            order.ShippingTotalFormatted = String.Format("{0:n}", order.ShippingTotal);
+            order.FeeTotalFormatted = String.Format("{0:n}", order.FeeTotal);
+            order.SubTotalFormatted = String.Format("{0:n}", order.SubTotal);
+            order.TaxTotalFormatted = String.Format("{0:n}", order.TaxTotal);
+            order.TotalFormatted = String.Format("{0:n}", order.Total);
+            foreach (var item in order.Items)
+            {
+                item.PlacedPriceFormatted = String.Format("{0:n}", item.PlacedPrice);
+                item.ExtendedPriceFormatted = String.Format("{0:n}", item.ExtendedPrice);
+            }
 
             invoice.CustomerOrder = order;
             _notificationTemplateResolver.ResolveTemplate(invoice);
@@ -665,7 +703,7 @@ namespace VirtoCommerce.OrderModule.Web.Controllers.Api
                 throw new InvalidOperationException($"Cannot find order with number {orderNumber}");
             }
 
-            var shipping = _notificationManager.GetNewNotification<ShippingEmailNotification>(order.StoreId, "Store", order.LanguageCode);
+            var shipping = _notificationManager.GetNewNotification<ShippingLabelEmailNotification>(order.StoreId, "Store", order.LanguageCode);
 
             shipping.CustomerOrder = order;
             _notificationTemplateResolver.ResolveTemplate(shipping);
