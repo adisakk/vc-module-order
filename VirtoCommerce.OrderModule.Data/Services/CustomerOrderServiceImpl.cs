@@ -270,6 +270,17 @@ namespace VirtoCommerce.OrderModule.Data.Services
             {
                 query = query.Where(x => x.Items.Any(i => i.ProductOwner == criteria.ProductOwner));
             }
+            if (!criteria.ProductName.IsNullOrEmpty())
+            {
+                if (criteria.ProductNamePartial)
+                {
+                    query = query.Where(x => x.Items.Any(i => i.Name.Contains(criteria.ProductName.Trim())));
+
+                } else
+                {
+                    query = query.Where(x => x.Items.Any(i => i.Name == criteria.ProductName.Trim()));
+                }
+            }
 
             return query;
         }

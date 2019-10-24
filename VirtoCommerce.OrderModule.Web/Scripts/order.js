@@ -627,6 +627,12 @@ angular.module(moduleName, ['virtoCommerce.catalogModule', 'virtoCommerce.pricin
                 title: "orders.blades.shipment-detail.labels.employee",
                 templateUrl: 'filter-employeeSelector.html'
             }
+            /*,
+            {
+                name: 'productId',
+                title: "orders.blades.customerOrder-detail.labels.product",
+                templateUrl: 'productSelector.html'
+            }*/
         ]);
 
         $http.get('Modules/$(VirtoCommerce.Orders)/Scripts/widgets/dashboard/statistics-templates.html').then(function (response) {

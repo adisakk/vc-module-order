@@ -4,7 +4,7 @@ angular.module('virtoCommerce.orderModule')
         var blade = $scope.blade;
 
         blade.metaFields = blade.metaFields ? blade.metaFields : metaFormsService.getMetaFields('orderFilterDetail');
-        
+
         function translateBladeStatuses(data) {
             blade.statuses = statusTranslationService.translateStatuses(data, 'customerOrder');
         }

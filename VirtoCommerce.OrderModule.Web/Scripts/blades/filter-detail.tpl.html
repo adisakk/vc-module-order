@@ -1,4 +1,4 @@
-﻿<div class="blade-content">
+<div class="blade-content">
     <div class="blade-inner">
         <div class="inner-block clearfix">
             <form class="form" name="formScope">
@@ -12,6 +12,23 @@
                 </div>
 
                 <va-metaform registered-inputs="blade.metaFields" blade="blade"></va-metaform>
+
+                <div class="form-group">
+                    <label class="form-label">{{ 'orders.blades.customerOrder-detail.labels.product-name' | translate }}</label>
+                    <div class="">
+                        <div class="form-input">
+                            <input ng-model="blade.currentEntity.productName" placeholder="{{ 'orders.blades.filter-detail.placeholders.all' | translate }}" />
+                        </div>
+                    </div>
+                    <div class="form-input">
+                        <label class="form-label __switch">
+                            <input type="checkbox" ng-model="blade.currentEntity.productNamePartial" ng-disabled="!blade.currentEntity.productName">
+                            <span class="switch"></span>
+                        </label>
+                        <label class="form-label">{{'orders.blades.customerOrder-detail.labels.partial' | translate}}</label>
+                    </div>
+                </div>
+                
             </form>
         </div>
     </div>
