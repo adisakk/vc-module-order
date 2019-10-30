@@ -142,6 +142,7 @@
             <permission id="order:update" name="Update order data" description="Permission to update order data."/>
             <permission id="order:delete" name="Delete order" description="Permission to delete orders."/>
             <permission id="order:read_prices" name="View order prices" description="Permission to view order prices."/>
+            <permission id="order:read_all" name="View all orders" description="Permission to view all orders."/>
         </group>
     </permissions>
 </module>

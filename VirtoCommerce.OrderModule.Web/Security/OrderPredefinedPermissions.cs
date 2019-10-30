@@ -8,5 +8,6 @@ namespace VirtoCommerce.OrderModule.Web.Security
         public const string Update = "order:update";
         public const string Delete = "order:delete";
         public const string ReadPrices = "order:read_prices";
+        public const string ReadAll = "order:read_all";
     }
 }
